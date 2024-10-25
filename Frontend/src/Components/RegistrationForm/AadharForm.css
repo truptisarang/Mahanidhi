@@ -1,0 +1,35 @@
+#Form{
+    padding:.5rem;
+    margin:1rem;
+    overflow-y: auto;
+} 
+
+#Form::-webkit-scrollbar {
+  width:.7rem; /* Width of the vertical scrollbar */
+}
+
+#Form::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+#Form::-webkit-scrollbar-thumb {
+  background-color: #1973db; /* Color of the scrollbar handle (thumb) */
+  border-radius: 9px; /* Rounded corners on the scrollbar handle */
+  border: 2px solid #ccc; /* Border around the scrollbar handle */
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#btnBack{
+  margin-right:1rem;
+}
