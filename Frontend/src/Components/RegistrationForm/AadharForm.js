@@ -10,6 +10,9 @@ import { useState } from 'react';
 import PersonalDetails from './PersonalDetails';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import WalletCreation from './WalletCreation';
+import {MuiOtpInput} from 'mui-one-time-password-input'
+import axios from 'axios';
+
 
 const steps = [
     'Aadhar Number',
@@ -23,6 +26,9 @@ const AadharForm = () =>{
     const [Error, setError] = useState("");
     const [activeStep , setActiveStep]  = useState(0)
     const [completed, setCompleted] = useState({});
+    const [OTPsent, setOTPsent] = useState(false);
+    const [OTP, setOTP] = useState('');
+
 
     const checkAadharNumber = (e)=>{
       if (/^\d{0,12}$/.test(e.target.value)) {
@@ -72,6 +78,16 @@ const AadharForm = () =>{
       goToNext();
     };
 
+    const sendOTP = async() =>{
+      const response = await axios.post("https://a01b5d91-f944-407e-b99f-c1dc524c1dcc.mock.pstmn.io/auth/sendOTP");
+      console.log(response)
+      setOTPsent(true)
+    }
+
+    const handleOTP = (newValue) =>{
+      setOTP(newValue)
+    }
+
     return (
       <>
         <h3>Beneficiary Registration</h3>
@@ -86,7 +102,8 @@ const AadharForm = () =>{
         </Box>
         <div id='Form'>
             <form autoComplete='off'>
-                {activeStep == 0 && <TextField 
+                {activeStep ===
+                 0 && <TextField 
                     label="Enter Aadhaar No"
                     color='secondary'
                     fullWidth
@@ -102,8 +119,14 @@ const AadharForm = () =>{
             </form>
         </div>
         {activeStep === 1 && <Button variant="contained" startIcon={<NavigateBeforeIcon/>} id='btnBack' onClick={handleBack} className='btnBack'> Back </Button>}
-        {activeStep === 0 && <Button variant="contained"  id='btnBack'> Send otp </Button>}
-        {activeStep != 2 && <Button variant="contained" disabled={false} onClick={handleComplete} endIcon={<NavigateNextIcon/>} > Next </Button>}
+        {activeStep === 0 && <Button variant="contained"  id='btnBack' onClick={sendOTP}> Send otp </Button>}
+        {OTPsent &&  <div >
+          <MuiOtpInput id='otp' length={6} value={OTP} onChange={handleOTP}/> 
+          <Button variant="contained" disabled={OTP.length != 6}> verify otp </Button>
+        </div>
+       }
+        
+        {activeStep === 2 && <Button variant="contained" disabled={true} onClick={handleComplete} endIcon={<NavigateNextIcon/>} > Next </Button>}
       </>
     );
 }

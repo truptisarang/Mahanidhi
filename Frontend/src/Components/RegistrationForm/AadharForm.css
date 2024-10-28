@@ -4,6 +4,10 @@
     overflow-y: auto;
 } 
 
+#otp{
+  margin:1rem;  
+}
+
 #Form::-webkit-scrollbar {
   width:.7rem; /* Width of the vertical scrollbar */
 }
