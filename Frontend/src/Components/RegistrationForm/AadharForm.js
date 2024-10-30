@@ -28,7 +28,7 @@ const AadharForm = () =>{
     const [completed, setCompleted] = useState({});
     const [OTPsent, setOTPsent] = useState(false);
     const [OTP, setOTP] = useState('');
-
+    const [userData , setuserData] = useState({});
 
     const checkAadharNumber = (e)=>{
       if (/^\d{0,12}$/.test(e.target.value)) {
@@ -84,6 +84,16 @@ const AadharForm = () =>{
       setOTPsent(true)
     }
 
+    const verifyOTP = async() =>{
+      const response = await axios.post("https://a01b5d91-f944-407e-b99f-c1dc524c1dcc.mock.pstmn.io/auth/verifyOTP");
+      console.log(response);
+      setuserData(response.data?.data);
+      if (response?.data?.status === "success"){
+        goToNext();
+        setOTPsent(false)
+      }
+    }
+
     const handleOTP = (newValue) =>{
       setOTP(newValue)
     }
@@ -114,7 +124,7 @@ const AadharForm = () =>{
                     error={Error && Error}
                     helperText={Error && Error}
                 />}
-                {activeStep === 1 && <PersonalDetails/>}
+                {activeStep === 1 && <PersonalDetails details={userData}/>}
                 {activeStep === 2 && <WalletCreation/>}
             </form>
         </div>
@@ -122,11 +132,11 @@ const AadharForm = () =>{
         {activeStep === 0 && <Button variant="contained"  id='btnBack' onClick={sendOTP}> Send otp </Button>}
         {OTPsent &&  <div >
           <MuiOtpInput id='otp' length={6} value={OTP} onChange={handleOTP}/> 
-          <Button variant="contained" disabled={OTP.length != 6}> verify otp </Button>
+          <Button variant="contained" disabled={OTP.length != 6} onClick={verifyOTP}> verify otp </Button>
         </div>
        }
         
-        {activeStep === 2 && <Button variant="contained" disabled={true} onClick={handleComplete} endIcon={<NavigateNextIcon/>} > Next </Button>}
+        {activeStep === 1 && <Button variant="contained" disabled={true} onClick={handleComplete} endIcon={<NavigateNextIcon/>} > Next </Button>}
       </>
     );
 }
