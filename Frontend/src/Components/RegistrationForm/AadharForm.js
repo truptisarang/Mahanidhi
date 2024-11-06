@@ -4,20 +4,20 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import { TextField } from '@mui/material';
 import Button from '@mui/material/Button';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import './AadharForm.css'
 import { useState } from 'react';
 import PersonalDetails from './PersonalDetails';
-import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import WalletCreation from './WalletCreation';
 import {MuiOtpInput} from 'mui-one-time-password-input'
 import axios from 'axios';
+import Guide from './Guide';
 
 
 const steps = [
-    'Aadhar Number',
+    'Aadhaar Number',
     'Personal Details',
     'Wallet Creation',
+    'Guide'
   ];
 
 
@@ -31,9 +31,10 @@ const AadharForm = () =>{
     const [userData , setuserData] = useState({});
 
     const checkAadharNumber = (e)=>{
-      if (/^\d{0,12}$/.test(e.target.value)) {
-        setAadhar(e.target.value);
-        setError("Please enter valid 12-digit Aadhar number")
+      const aadhaar = e.target.value;
+      setAadhar(aadhaar)
+      if(e.target.value.length < 12){
+        setError("Please enter 12 digit Aadhaar number")
       }else{
         setError("")
       }
@@ -66,18 +67,8 @@ const AadharForm = () =>{
       }
     }
 
-    const handleBack = () =>{
-       setActiveStep(activeStep  - 1);
-    }
     
-    const handleComplete = () => {
-      setCompleted({
-        ...completed,
-        [activeStep]: true,
-      });
-      goToNext();
-    };
-
+    
     const sendOTP = async() =>{
       const response = await axios.post("https://a01b5d91-f944-407e-b99f-c1dc524c1dcc.mock.pstmn.io/auth/sendOTP");
       console.log(response)
@@ -89,8 +80,16 @@ const AadharForm = () =>{
       console.log(response);
       setuserData(response.data?.data);
       if (response?.data?.status === "success"){
-        goToNext();
+        setOTP("")
         setOTPsent(false)
+        goToNext();
+      }
+    }
+
+    const handleKeyDown=(e)=>{
+      const special_char_regex = /[0-9]{12}/
+      if(!special_char_regex.test(e.key)){
+        e.preventDefault();
       }
     }
 
@@ -117,26 +116,27 @@ const AadharForm = () =>{
                     label="Enter Aadhaar No"
                     color='secondary'
                     fullWidth
+                    inputProps={{
+                      maxLength:12
+                    }}
                     required
                     onChange={checkAadharNumber}
-                    value={Aadhar}
-                    type='number'
                     error={Error && Error}
                     helperText={Error && Error}
+                    value={Aadhar}
                 />}
-                {activeStep === 1 && <PersonalDetails details={userData}/>}
-                {activeStep === 2 && <WalletCreation/>}
+                {activeStep === 1 && <PersonalDetails details={userData} activeStep={{activeStep,setActiveStep}} completed={{completed, setCompleted}} next={goToNext}/>}
+                {activeStep === 2 && <WalletCreation next={goToNext}/>}
+                {activeStep === 3 && <Guide/>}
             </form>
         </div>
-        {activeStep === 1 && <Button variant="contained" startIcon={<NavigateBeforeIcon/>} id='btnBack' onClick={handleBack} className='btnBack'> Back </Button>}
+
         {activeStep === 0 && <Button variant="contained"  id='btnBack' onClick={sendOTP}> Send otp </Button>}
         {OTPsent &&  <div >
           <MuiOtpInput id='otp' length={6} value={OTP} onChange={handleOTP}/> 
           <Button variant="contained" disabled={OTP.length != 6} onClick={verifyOTP}> verify otp </Button>
         </div>
        }
-        
-        {activeStep === 1 && <Button variant="contained" disabled={true} onClick={handleComplete} endIcon={<NavigateNextIcon/>} > Next </Button>}
       </>
     );
 }
