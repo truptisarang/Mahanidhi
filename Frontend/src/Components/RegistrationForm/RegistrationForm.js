@@ -1,7 +1,6 @@
 import React from "react";
 import './RegistrationForm.css'
 import AadharForm from "./AadharForm";
-import Navbar from "../Navbar/Navbar";
 
 
 const RegistrationForm = () =>{

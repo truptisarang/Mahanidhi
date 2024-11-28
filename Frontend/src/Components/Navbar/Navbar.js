@@ -2,19 +2,31 @@ import React from "react";
 import LoginIcon from '@mui/icons-material/Login';
 import Button from '@mui/material/Button';
 import "../Navbar/Navbar.css"
+import { useLocation, useNavigate } from 'react-router-dom'
+import CreateIcon from '@mui/icons-material/Create';
 
 const Navbar = () =>{
+    const location = useLocation();
+    const currentRoute = location.pathname;
+    const navigate = useNavigate();
+
+    const onLogin = () =>{
+      navigate('/login')
+    }
+
+    const onRegister = () =>{
+      navigate('/registration')
+    }
+    
     return (
       <>
-        <div>
+        <div id="navContainer">
           <navbar>
             <div id="logo">
               <h3>भारत निधि</h3>
             </div>
             <div id="Btnlogin">
-              <Button variant="filled" endIcon={<LoginIcon />}>
-                Login
-              </Button>
+              {currentRoute === "/login" ? <Button variant="filled" endIcon={<CreateIcon />} onClick={onRegister}>Register</Button> : <Button variant="filled" endIcon={<LoginIcon />} onClick={onLogin}>Login</Button>}
             </div>
           </navbar>
         </div>

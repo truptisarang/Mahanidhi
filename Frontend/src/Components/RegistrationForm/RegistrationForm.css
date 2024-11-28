@@ -1,13 +1,13 @@
-#regiForm{
+/* #regiForm{
         display:grid;
         height: 100vh;
         grid-template-columns: 1fr;
         grid-template-rows: auto 1fr;
         grid-template-areas: "navbar" "form" ;
-}
+} */
  #regiForm #mainForm{ 
-    grid-area:form;
-    background-color: var(--mainColor);
+    /* grid-area:form;
+    background-color: var(--mainColor); */
     display: flex;
     align-items: center;
     justify-content: center;

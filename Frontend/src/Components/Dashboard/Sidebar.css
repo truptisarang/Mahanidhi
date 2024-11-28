@@ -1,0 +1,28 @@
+.navlink{
+    background-color: #36454F;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    width: 80%;
+    text-align: center;
+    text-decoration: none;
+    color:white;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+#navigation{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.active{
+    background-color: #E5E4E2;
+    color:black;
+}
+
+.navlink:hover{
+    background-color: #818080;
+    color:white;
+}
+

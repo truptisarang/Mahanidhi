@@ -1,0 +1,39 @@
+#carouselContainer{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    margin:1rem;
+}
+
+
+#carouselContainer #carouselImage{
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+#carouselImage{
+    object-fit: contain;
+    width: 100%;
+}
+
+#carouselText{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    flex-direction: column;
+}
+
+@media (max-width: 768px) {
+    #carouselContainer {
+        grid-template-columns: 1fr;  /* Stack the image and text in a single column */
+    }
+
+    #carouselImage{
+        width:50;
+        height:50;
+        object-fit: fill;
+    }
+    #carouselText{
+        font-size:1rem;
+    }
+}
