@@ -23,7 +23,7 @@ const Navbar = () =>{
         <div id="navContainer">
           <navbar>
             <div id="logo">
-              <h3>भारत निधि</h3>
+              <h3>महा निधी</h3>
             </div>
             <div id="Btnlogin">
               {currentRoute === "/login" ? <Button variant="filled" endIcon={<CreateIcon />} onClick={onRegister}>Register</Button> : <Button variant="filled" endIcon={<LoginIcon />} onClick={onLogin}>Login</Button>}

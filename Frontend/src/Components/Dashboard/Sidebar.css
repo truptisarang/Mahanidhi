@@ -1,5 +1,5 @@
-.navlink{
-    background-color: #36454F;
+.link{
+    /* background-color: #36454F; */
     margin-bottom: 1rem;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -8,6 +8,10 @@
     text-decoration: none;
     color:white;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap:1rem;
 }
 #navigation{
     display: flex;
@@ -16,13 +20,18 @@
     width: 100%;
 }
 
-.active{
-    background-color: #E5E4E2;
+.link.active{
+    background-color: #ffffff;
     color:black;
 }
 
-.navlink:hover{
+.link:hover{
     background-color: #818080;
     color:white;
 }
 
+.link{
+    text-align: center;
+    text-decoration: none;
+    color:white;
+}

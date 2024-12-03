@@ -11,7 +11,7 @@ const Home = () =>{
             <div id='homeContainer'>
                 <div id="heroSection">
                     <img src="rupee_symbol-removebg-preview.png" width={150} height={150}></img>
-                   <h1 style={{"fontSize":"3rem"}}>भारत निधि  |  Bharat Nidhi</h1>
+                   <h1 style={{"fontSize":"3rem"}}>महा निधी |  MahaNidhi</h1>
                    <p>A secure, transparent, and efficient blockchain-based fund disbursement system.</p>
                 </div>
                 <div id="department">

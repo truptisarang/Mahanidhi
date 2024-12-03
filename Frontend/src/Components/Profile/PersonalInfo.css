@@ -3,7 +3,21 @@
 }
 
 .details_pane{
-    border:var(--secondaryColor) 1px solid;
+    border:rgba(0,0,0, 0.2) 1px solid ;
+    border-radius: .5rem;
     padding: 1rem;
     margin: .5rem;
+}
+
+#txtboxes{
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-area: "txtbox1 txtbox2";
+    gap:1rem;
+    margin:1rem;
+}
+
+#txtbox1{
+    grid-area: "txtbox1";
 }

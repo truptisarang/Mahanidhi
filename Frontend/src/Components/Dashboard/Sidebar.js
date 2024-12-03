@@ -1,11 +1,16 @@
 import { NavLink } from "react-router-dom"
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import FeedIcon from '@mui/icons-material/Feed';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import PersonIcon from '@mui/icons-material/Person';
 import "../Dashboard/Sidebar.css"
+import { Box } from "@mui/material";
 const Sidebar = () =>{
     const links = [
-        {to:"/dashboard", text:"Dashboard"},
-        {to:"/myapplications", text:"My applications"},
-        {to:"/myapplications", text:"Notifications"},
-        {to:"/profile", text:"Profile"},
+        {icons:<DashboardIcon/>, to:"/dashboard", text:"Dashboard"},
+        {icons:<FeedIcon/>, to:"/myapplications", text:"My applications"},
+        {icons:<NotificationsIcon/>,to:"/myapplications", text:"Notifications"},
+        {icons:<PersonIcon/>, to:"/profile", text:"Profile"},
     ]
     return (
         <>
@@ -14,7 +19,7 @@ const Sidebar = () =>{
         {
             links.map((link)=>{
                 return (
-                    <NavLink className="navlink" to={link.to}>{link.text}</NavLink>
+                        <NavLink className="link" to={link.to}>{link.icons}{link.text}</NavLink>
                 )
             })
         }
