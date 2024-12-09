@@ -6,7 +6,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import {MuiOtpInput} from 'mui-one-time-password-input'
 
 
-const Login = () =>{
+const Login = (props) =>{
     const [showPassword, setshowPassword] = useState(true)
     const [OTPsent, setOTPsent] = useState(false)
     const [OTP, setOTP] = useState("");
@@ -33,7 +33,7 @@ const Login = () =>{
         <>
             <div id="loginContainer">
                 <div id="loginHeader">
-                    <p>Login</p>
+                    <p>{props.title} Login</p>
                 </div>
                 <div id="rupeeImage">
                      <img src="/rupee_symbol-removebg-preview.png" width={200}/> 

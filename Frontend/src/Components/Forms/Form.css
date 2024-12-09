@@ -1,0 +1,22 @@
+#form_container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-area: "labels controls";
+    gap:1rem;
+}
+
+#labels{
+    grid-area: "labels";
+    display: grid;
+    grid-template-rows:repeat(8,1fr);
+}
+
+#row{
+    margin:1rem;
+}
+
+#controls{
+    grid-area: "controls";
+    display: grid;
+    grid-template-rows:repeat(8,1fr);
+}
