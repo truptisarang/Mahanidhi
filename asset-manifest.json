@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Mahanidhi/static/css/main.8307f97d.css",
+    "main.js": "/Mahanidhi/static/js/main.0435fe83.js",
+    "static/js/453.bea66239.chunk.js": "/Mahanidhi/static/js/453.bea66239.chunk.js",
+    "index.html": "/Mahanidhi/index.html",
+    "main.8307f97d.css.map": "/Mahanidhi/static/css/main.8307f97d.css.map",
+    "main.0435fe83.js.map": "/Mahanidhi/static/js/main.0435fe83.js.map",
+    "453.bea66239.chunk.js.map": "/Mahanidhi/static/js/453.bea66239.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8307f97d.css",
+    "static/js/main.0435fe83.js"
+  ]
+}
