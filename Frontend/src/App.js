@@ -16,6 +16,7 @@ import Post_mat_OBC from './Components/EligibilityCriteria/Post_mat_OBC';
 import SchemeForm from './Components/Forms/Form';
 import AdminLogin from './Components/Admin/AdminLogin';
 import AdminDashboard from './Components/Admin/AdminDashboard';
+import OfficerDashboard from './Components/Admin/OfficerDashboard';
 
 const theme = createTheme({
   palette:{
@@ -50,6 +51,7 @@ function App() {
             <Route path='/post-matric-vjnt-form' element={<SchemeForm caste="VJNT"/>}/>
             <Route path='/admin-login' element={<AdminLogin title="Admin"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
+            <Route path='/officer-dashboard' element={<OfficerDashboard/>}/>
             <Route path='*' element={<Error/>}/>
         </Routes>
       </BrowserRouter>

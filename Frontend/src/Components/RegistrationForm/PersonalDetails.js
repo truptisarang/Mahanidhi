@@ -1,7 +1,7 @@
 import { TextField, Grid, Avatar, IconButton, Typography, Modal, Box} from '@mui/material';
 
 import InputAdornment from '@mui/material/InputAdornment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import InfoIcon from '@mui/icons-material/Info';
@@ -24,6 +24,15 @@ const PersonalDetails = (props) =>{
     const goToNext = props.next;
     const {activeStep, setActiveStep} = props.activeStep;
     const isFormValid = !(isUsernameValid && isPasswordValid);
+    sessionStorage.setItem("PersonalDetails", JSON.stringify(props.details))
+    
+    useEffect(()=>{
+      const username = sessionStorage.getItem("Username")
+      const password = sessionStorage.getItem("Password")
+      setCreds({username:username,password:password})
+      setisPasswordValid(true)
+      setisUsernameValid(true)
+    },[])
 
     const handlePopoverOpen = (e) =>{
       setanchorEl(e.currentTarget)
@@ -62,7 +71,6 @@ const PersonalDetails = (props) =>{
     const ValidateUsername = (e) =>{
       setCreds({...Creds,username:e.target.value})
       const username_regex = /^[A-Za-z][A-Za-z0-9_.]{7,}$/gm;
-      
 
       if(!(e.target.validity.valid)){
         setusernameerror('Please enter username')
@@ -75,6 +83,7 @@ const PersonalDetails = (props) =>{
             setusernameerror("Username cannot be same as password.")
             setisUsernameValid(false)
           }else{
+            sessionStorage.setItem("Username", e.target.value)
             setusernameerror("")
             setisUsernameValid(true)
           }
@@ -113,6 +122,7 @@ const PersonalDetails = (props) =>{
         setisPasswordValid(false)
       }
       else{
+        sessionStorage.setItem("Password", e.target.value)
         setpassworderror("")
         setisPasswordValid(true)
       }
@@ -122,25 +132,25 @@ const PersonalDetails = (props) =>{
       <>
         <Grid container spacing={2} justifyContent={"center"}>
           <Grid item size={6}>
-            <Avatar src={props.details.photo_url} sx={{height:200, width:200}}/>
+            <Avatar src={props.details.photo} sx={{height:200, width:200}}/>
           </Grid>
 
           <Grid item xs={6} container>
               <Grid item xs={12}>
-                <TextField label="Full Name" value={props.details?.name} fullWidth disabled/>
+                <TextField label="Full Name" value={props.details?.FullName} fullWidth disabled/>
               </Grid>
               <Grid item xs={12}>
-                <TextField label="DOB" value={props.details?.dob} fullWidth disabled/>
+                <TextField label="DOB" value={props.details?.DOB} fullWidth disabled/>
               </Grid>
               <Grid item xs={12}>
-                <TextField label="Gender" value={props.details?.gender} fullWidth disabled/>
+                <TextField label="Gender" value={props.details?.Gender} fullWidth disabled/>
               </Grid>
           </Grid>
           <Grid item xs={6}>
-            <TextField label="Address" value={props.details?.address} fullWidth disabled/>
+            <TextField label="Address" value={props.details?.Address} fullWidth disabled/>
           </Grid>
            <Grid item xs={6}>
-                <TextField label="Aadhaar Number" value={props.details?.aadhaarNumber} fullWidth disabled/>
+                <TextField label="Aadhaar Number" value={props.details?.AadhaarNumber} fullWidth disabled/>
            </Grid>
            <Grid item xs={6}>
                 <TextField label="Username"

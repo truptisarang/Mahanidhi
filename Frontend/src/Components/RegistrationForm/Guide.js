@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Guide = () =>{
     
     const navigate = useNavigate();
-
+    sessionStorage.clear();
     return(
         <>
         <div style={{textAlign:"left"}}>
@@ -25,7 +25,7 @@ const Guide = () =>{
             Click on “Import” to proceed.
         </p>
         </div>
-            <Button variant="outlined" onClick={(e)=>navigate('/home')}>Done</Button>
+            <Button variant="outlined" onClick={(e)=>navigate('/login')}>Done</Button>
         </>
     )
 }
