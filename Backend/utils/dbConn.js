@@ -28,7 +28,7 @@ const connectMockAadhaarDB = async () => {
         FullName: String,
         DOB: String,
         Gender: String,
-        Address: String,
+        Address: Object,
         PhoneNumber: String,
       })
     );

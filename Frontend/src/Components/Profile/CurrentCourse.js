@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../Profile/CurrentCourse.css";
 import {
   Box,
@@ -6,30 +6,89 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
-  TextField,
   Button,
+  IconButton,
 } from "@mui/material";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import statesWithDistricts from "./States";
+import Qualification from "../../data/Qualification";
+import Stream from "../../data/Stream";
+import CollegeNames from "../../data/CollegeNames";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const CurrentCourse = () => {
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
+const CurrentCourse = (props) => {
+  useEffect(() => {
+    const CourseDetails = JSON.parse(sessionStorage.getItem("CourseDetails"));
+    setAcademicData(CourseDetails);
+  }, []);
+  const [AcademicData, setAcademicData] = useState([]);
+  const [CourseData, setCourseData] = useState({
+    admissionYear: "",
+    instituteName: "",
+    instituteState: "",
+    instituteDistrict: "",
+    instituteTaluka: "",
+    qualification: "",
+    stream: "",
+    courseName: "",
+    yearOfStudy: "",
+    completedPursuing: "",
+    isProfessional: "",
+    mode: "",
+    result: "",
+  });
+
+  const yos = [
+    "Direct Second Year",
+    "Direct Third Year",
+    "First Year",
+    "Second Year",
+    "Third Year",
   ];
-  
+
+  const goback = props.backHandler;
+  const generateYears = () => {
+    const currentYear = new Date().getFullYear();
+    const minYear = currentYear - 5;
+    const yearArray = [];
+    for (let i = minYear; i <= currentYear; i++) {
+      yearArray.push(i);
+    }
+    return yearArray;
+  };
+  const SaveDetails = () => {
+    const course_data = [...AcademicData, CourseData];
+    setAcademicData(course_data);
+    sessionStorage.setItem("CourseDetails", JSON.stringify(course_data));
+    setCourseData({
+      admissionYear: "",
+      instituteName: "",
+      instituteState: "",
+      instituteDistrict: "",
+      instituteTaluka: "",
+      qualification: "",
+      stream: "",
+      courseName: "",
+      yearOfStudy: "",
+      completedPursuing: "",
+      isProfessional: "",
+      mode: "",
+      result: "",
+    });
+  };
+
+  const DeleteCourseData = (index) => {
+    // exclude the element index from the array and create a new array set the array to the state variable
+    const updateAD = AcademicData.filter((_, i) => i != index);
+    setAcademicData(updateAD);
+  };
+
   return (
     <Box display={"flex"} flexDirection={"column"} gap={1} margin={"1rem"}>
       <div id="instruction_box">
@@ -56,11 +115,19 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="AYLabel"
               label="Admission Year in Current Course"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.admissionYear}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, admissionYear: e.target.value })
+              }
+            >
+              {generateYears().map((year, index) => {
+                return (
+                  <MenuItem key={index} value={year}>
+                    {year}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="IStateLabel">Institute State</InputLabel>
@@ -68,11 +135,19 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="IStateLabel"
               label="Institute State"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.instituteState}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, instituteState: e.target.value })
+              }
+            >
+              {statesWithDistricts.map((state, index) => {
+                return (
+                  <MenuItem key={index} value={state.state}>
+                    {state.state}
+                  </MenuItem>
+                );
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="IDistLabel">Institute District</InputLabel>
@@ -80,11 +155,24 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="IDistLabel"
               label="Institute State"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.instituteDistrict}
+              onChange={(e) =>
+                setCourseData({
+                  ...CourseData,
+                  instituteDistrict: e.target.value,
+                })
+              }
+            >
+              {statesWithDistricts
+                .filter((state) => state.state === CourseData.instituteState)
+                .map((st) =>
+                  st.districts.map((dist, index) => (
+                    <MenuItem key={index} value={dist}>
+                      {dist}
+                    </MenuItem>
+                  ))
+                )}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="ITalLabel">Institute Taluka</InputLabel>
@@ -92,11 +180,24 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="ITalLabel"
               label="Institute Taluka"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.instituteTaluka}
+              onChange={(e) =>
+                setCourseData({
+                  ...CourseData,
+                  instituteTaluka: e.target.value,
+                })
+              }
+            >
+              {statesWithDistricts
+                .filter((state) => state.state === CourseData.instituteState)
+                .map((st) =>
+                  st.districts.map((dist, index) => (
+                    <MenuItem key={index} value={dist}>
+                      {dist}
+                    </MenuItem>
+                  ))
+                )}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="QualiLabel">Qualification</InputLabel>
@@ -104,11 +205,15 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="QualiLabel"
               label="Qualification"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.qualification}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, qualification: e.target.value })
+              }
+            >
+              {Qualification.map((quali) => {
+                return <MenuItem value={quali}>{quali}</MenuItem>;
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="StreamLabel">Stream</InputLabel>
@@ -116,11 +221,15 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="StreamLabel"
               label="Stream"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.stream}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, stream: e.target.value })
+              }
+            >
+              {Stream.map((st) => {
+                return <MenuItem value={st}>{st}</MenuItem>;
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="ClgLabel">College Name/ School Name</InputLabel>
@@ -128,11 +237,15 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="ClgLabel"
               label="College Name/ School Name"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.instituteName}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, instituteName: e.target.value })
+              }
+            >
+              {CollegeNames.map((cldata) => {
+                return <MenuItem value={cldata.name}>{cldata.name}</MenuItem>;
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="CourseLabel">Course Name</InputLabel>
@@ -140,11 +253,21 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="CourseLabel"
               label="Course Name"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.courseName}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, courseName: e.target.value })
+              }
+            >
+              {CollegeNames.filter(
+                (cldata) => cldata.name === CourseData.instituteName
+              ).map((clg) => {
+                return clg.courses.map((c, index) => (
+                  <MenuItem key={index} value={c}>
+                    {c}
+                  </MenuItem>
+                ));
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="YosLabel">Year of study</InputLabel>
@@ -152,11 +275,15 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="YosLabel"
               label="Year of study"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.yearOfStudy}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, yearOfStudy: e.target.value })
+              }
+            >
+              {yos.map((yostudy) => {
+                return <MenuItem value={yostudy}>{yostudy}</MenuItem>;
+              })}
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="CPLabel">Completed / Pursuing</InputLabel>
@@ -164,11 +291,17 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="CPLabel"
               label="Completed / Pursuing"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.completedPursuing}
+              onChange={(e) =>
+                setCourseData({
+                  ...CourseData,
+                  completedPursuing: e.target.value,
+                })
+              }
+            >
+              <MenuItem value={"Completed"}>Completed</MenuItem>
+              <MenuItem value={"Pursuing"}>Pursuing</MenuItem>
+            </Select>
           </FormControl>
           <FormControl>
             <InputLabel id="ProfLabel">Is Professional?</InputLabel>
@@ -176,37 +309,45 @@ const CurrentCourse = () => {
               style={{ width: "100%" }}
               labelId="ProfLabel"
               label="Is Professional?"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              value={CourseData.isProfessional}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, isProfessional: e.target.value })
+              }
+            >
+              <MenuItem value={"Non Professional Course"}>
+                Non Professional Course
+              </MenuItem>
+              <MenuItem value={"Professional Course"}>
+                Professional Course
+              </MenuItem>
+            </Select>
           </FormControl>
           <FormControl>
-            <InputLabel id="CatLabel">
-              Is Admission Through Open Or Reserved Category ?
-            </InputLabel>
+            <InputLabel id="resultLabel">Result</InputLabel>
             <Select
               style={{ width: "100%" }}
-              labelId="CatLabel"
-              label="Is Admission Through Open Or Reserved Category ?"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
-            ></Select>
+              labelId="resultLabel"
+              label="Result"
+              value={CourseData.result}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, result: e.target.value })
+              }
+            >
+              <MenuItem value={"Passed"}>Passed</MenuItem>
+              <MenuItem value={"Failed"}>Failed</MenuItem>
+            </Select>
           </FormControl>
-          <TextField label="Gap Years" type="number"></TextField>
+
           <FormControl>
             <InputLabel id="ModeLabel">Mode</InputLabel>
             <Select
               style={{ width: "100%" }}
               labelId="ModeLabel"
               label="Mode"
-              // value={MaritalStatus}
-              // onChange={(e) => {
-              //   setMaritalStatus(e.target.value);
-              // }}
+              value={CourseData.mode}
+              onChange={(e) =>
+                setCourseData({ ...CourseData, mode: e.target.value })
+              }
             >
               <MenuItem value={"Regular"}>Regular</MenuItem>
               <MenuItem value={"Distance/Correspondence"}>
@@ -216,45 +357,79 @@ const CurrentCourse = () => {
           </FormControl>
         </div>
         <Box display={"flex"} alignItems={"center"} justifyContent={"center"}>
-          <Button variant="contained" color="success">Save</Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={SaveDetails}
+            disabled={
+              !Object.values(CourseData).every((value) => {
+                return value !== "";
+              })
+            }
+          >
+            Save
+          </Button>
         </Box>
       </div>
       <div id="course_detail_table">
         <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <Table aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Sr No.</TableCell>
                 <TableCell align="right">Year of study</TableCell>
-                <TableCell align="right">Admission Date</TableCell>
-                <TableCell align="right">Admission Year in College / Institute</TableCell>
+                <TableCell align="right">
+                  Admission Year in College / Institute
+                </TableCell>
                 <TableCell align="right">College Name / School Name</TableCell>
                 <TableCell align="right">Course Name</TableCell>
-                <TableCell align="right">University Name</TableCell>
                 <TableCell align="right">Status</TableCell>
                 <TableCell align="right">Result</TableCell>
                 <TableCell align="right">Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
-                  <TableCell align="right">{row.protein}</TableCell>
-                </TableRow>
-              ))}
+              {AcademicData.map((ad, index) => {
+                return (
+                  <>
+                    <TableRow
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{ad?.yearOfStudy}</TableCell>
+                      <TableCell>{ad?.admissionYear}</TableCell>
+                      <TableCell>{ad?.instituteName}</TableCell>
+                      <TableCell>{ad?.courseName}</TableCell>
+                      <TableCell>{ad?.completedPursuing}</TableCell>
+                      <TableCell>{ad?.result}</TableCell>
+                      <TableCell>
+                        <IconButton onClick={(e) => DeleteCourseData(index)}>
+                          <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  </>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>
+        <Box></Box>
       </div>
+      <Box display={"flex"} alignItems={"center"} justifyContent={"center"} gap={'1rem'}>
+        <Button variant="contained" onClick={goback}>
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          onClick={props.nextHandler}
+          disabled={AcademicData.length === 0}
+        >
+          Next
+        </Button>
+      </Box>
     </Box>
   );
 };

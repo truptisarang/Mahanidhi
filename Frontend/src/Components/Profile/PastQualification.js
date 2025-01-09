@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormControl, InputLabel, Select, TextField } from "@mui/material";
+import { FormControl, InputLabel, Select,MenuItem,TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
@@ -10,6 +10,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Qualification from "../../data/Qualification";
+import Stream from "../../data/Stream";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -25,25 +27,43 @@ const VisuallyHiddenInput = styled("input")({
 
 const PastQualification = () => {
   const [Files, setFiles] = useState("");
-
+  const [Pquali, setPquali] = useState({
+      qualification: "",
+      stream: "",
+      completedPursuing: "Completed",
+      instituteName:"",
+      instituteState: "",
+      instituteDistrict: "",
+      instituteTaluka: "",
+      courseName: "",
+      board:"",
+      mode: "",
+      passingYear: "",
+      isProfessional: "",
+      result:""
+    });
   return (
     <div className="details_pane">
       <div id="instruction_box">
         Kindly Fill SSC And HSC Details, Ignore if you already filled
       </div>
       <div id="txtboxes">
-        <FormControl>
-          <InputLabel id="qualiLabel">Qualification Level</InputLabel>
-          <Select
-            style={{ width: "100%" }}
-            labelId="qualiLabel"
-            label="Qualification Level"
-            // value={MaritalStatus}
-            // onChange={(e) => {
-            //   setMaritalStatus(e.target.value);
-            // }}
-          ></Select>
-        </FormControl>
+      <FormControl>
+            <InputLabel id="QualiLabel">Qualification</InputLabel>
+            <Select
+              style={{ width: "100%" }}
+              labelId="QualiLabel"
+              label="Qualification"
+              // value={CourseData.qualification}
+              // onChange={(e) =>
+              //   setCourseData({ ...CourseData, qualification: e.target.value })
+              // }
+            >
+              {Qualification.map((quali) => {
+                return <MenuItem value={quali}>{quali}</MenuItem>;
+              })}
+            </Select>
+          </FormControl>
         <FormControl>
           <InputLabel id="streamLabel">Stream</InputLabel>
           <Select
@@ -54,7 +74,11 @@ const PastQualification = () => {
             // onChange={(e) => {
             //   setMaritalStatus(e.target.value);
             // }}
-          ></Select>
+          >
+            {Stream.map((st) => {
+                return <MenuItem value={st}>{st}</MenuItem>;
+              })}
+          </Select>
         </FormControl>
         <FormControl>
           <InputLabel id="completedLabel">Completed</InputLabel>
@@ -62,11 +86,9 @@ const PastQualification = () => {
             style={{ width: "100%" }}
             labelId="completedLabel"
             label="Completed"
-            // value={MaritalStatus}
-            // onChange={(e) => {
-            //   setMaritalStatus(e.target.value);
-            // }}
-          ></Select>
+           
+          >
+          </Select>
         </FormControl>
         <FormControl>
           <InputLabel id="IStateLabel">Institute State</InputLabel>
@@ -197,7 +219,7 @@ const PastQualification = () => {
           tabIndex={-1}
           startIcon={<CloudUploadIcon />}
         >
-          Upload Certificate
+          Upload Marksheet
           <VisuallyHiddenInput
             type="file"
             onChange={(event) => setFiles(event.target.files)}

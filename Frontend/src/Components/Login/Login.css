@@ -10,17 +10,9 @@
     padding:1rem;
     display:grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: .01fr 1fr;
-    grid-template-areas: "header header"
-    "rupeeImage loginForm"
-    ;
+    grid-template-rows: 1fr;
+    grid-template-areas: "rupeeImage loginForm";
     gap:.5rem;   
-}
-
-#loginHeader{
-    grid-area:header;
-    text-align: center;
-    font-size: 1.2rem;
 }
 
 #rupeeImage{

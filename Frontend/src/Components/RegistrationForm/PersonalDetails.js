@@ -147,7 +147,7 @@ const PersonalDetails = (props) =>{
               </Grid>
           </Grid>
           <Grid item xs={6}>
-            <TextField label="Address" value={props.details?.Address} fullWidth disabled/>
+            <TextField label="Address" value={props.details?.Address?.Address} fullWidth disabled/>
           </Grid>
            <Grid item xs={6}>
                 <TextField label="Aadhaar Number" value={props.details?.AadhaarNumber} fullWidth disabled/>

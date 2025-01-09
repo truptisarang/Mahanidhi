@@ -5,10 +5,11 @@ import PersonalInfo from "./PersonalInfo";
 import { AddressInfo } from "./AddressInfo";
 import CurrentCourse from "./CurrentCourse";
 import PastQualification from "./PastQualification";
+import Hostel from "./Hostel";
 
 const Profile = () =>{
     //  
-    const steps = ["Personal Information","Address Information", "Current Course", "Past Qualification"];
+    const steps = ["Personal Information","Address Information", "Current Course", "Hostel Details"];
     const [activeStep, setactiveStep] = useState(0);
     const handleNext = () => {
         if (activeStep < steps.length - 1) {
@@ -17,10 +18,11 @@ const Profile = () =>{
       };
 
       const handleBack = () => {
-        if (activeStep < steps.length - 1) {
+        if (activeStep <= steps.length - 1) {
             setactiveStep((prevStep) => prevStep - 1);
         }
       };
+
     return (
         <>
         <Box sx={{width: "100%"}}>
@@ -35,15 +37,11 @@ const Profile = () =>{
                 }
             </Stepper>
         </Box>
-        {activeStep === 0 && <PersonalInfo/>}
-        {activeStep === 1 && <AddressInfo/>}
-        {activeStep === 2 && <CurrentCourse/>}
-        {activeStep === 3 && <PastQualification/>}
-        <Box display={"flex"} alignItems={'center'} justifyContent={'center'} gap={2}>
-                {activeStep !== 0 && <Button variant="contained" onClick={handleBack}>Back</Button>}
-                {activeStep === 3 && <Button variant="contained" color="success">Save</Button>}
-                {activeStep !== 3 && <Button variant="contained" onClick={handleNext}>Next</Button>}
-        </Box>
+        {activeStep === 0 && <PersonalInfo activeStep={{activeStep,setactiveStep}} steps={steps}/>}
+        {activeStep === 1 && <AddressInfo nextHandler={handleNext} backHandler={handleBack}/>}
+        {activeStep === 2 && <CurrentCourse nextHandler={handleNext} backHandler={handleBack}/>}
+        {/* {activeStep === 3 && <PastQualification/>} */}
+        {activeStep === 3 && <Hostel backHandler={handleBack}/>}
         </>
     )
 }
