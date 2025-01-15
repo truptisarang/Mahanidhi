@@ -24,7 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 const CurrentCourse = (props) => {
   useEffect(() => {
-    const CourseDetails = JSON.parse(sessionStorage.getItem("CourseDetails"));
+    const CourseDetails = JSON.parse(sessionStorage.getItem("CourseDetails")) || [];
     setAcademicData(CourseDetails);
   }, []);
   const [AcademicData, setAcademicData] = useState([]);
@@ -389,7 +389,7 @@ const CurrentCourse = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {AcademicData.map((ad, index) => {
+              {AcademicData && AcademicData.map((ad, index) => {
                 return (
                   <>
                     <TableRow
@@ -397,14 +397,14 @@ const CurrentCourse = (props) => {
                         "&:last-child td, &:last-child th": { border: 0 },
                       }}
                     >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{ad?.yearOfStudy}</TableCell>
-                      <TableCell>{ad?.admissionYear}</TableCell>
-                      <TableCell>{ad?.instituteName}</TableCell>
-                      <TableCell>{ad?.courseName}</TableCell>
-                      <TableCell>{ad?.completedPursuing}</TableCell>
-                      <TableCell>{ad?.result}</TableCell>
-                      <TableCell>
+                      <TableCell align="center">{index + 1}</TableCell>
+                      <TableCell  align="right">{ad?.yearOfStudy}</TableCell>
+                      <TableCell align="right">{ad?.admissionYear}</TableCell>
+                      <TableCell align="right">{ad?.instituteName}</TableCell>
+                      <TableCell align="right">{ad?.courseName}</TableCell>
+                      <TableCell align="right">{ad?.completedPursuing}</TableCell>
+                      <TableCell align="right">{ad?.result}</TableCell>
+                      <TableCell align="right">
                         <IconButton onClick={(e) => DeleteCourseData(index)}>
                           <DeleteIcon></DeleteIcon>
                         </IconButton>
@@ -425,7 +425,7 @@ const CurrentCourse = (props) => {
         <Button
           variant="contained"
           onClick={props.nextHandler}
-          disabled={AcademicData.length === 0}
+          disabled={AcademicData?.length === 0}
         >
           Next
         </Button>

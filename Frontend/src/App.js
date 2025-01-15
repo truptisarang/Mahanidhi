@@ -17,6 +17,7 @@ import SchemeForm from './Components/Forms/Form';
 import AdminLogin from './Components/Admin/AdminLogin';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import OfficerDashboard from './Components/Admin/OfficerDashboard';
+import EligibleSchemes from './Components/EligibleSchemes/EligibleSchemes';
 
 const theme = createTheme({
   palette:{
@@ -43,12 +44,13 @@ function App() {
             <Route path='/dashboard' element={<Layout><Dashboard/></Layout>}/>
             <Route path='/profile' element={<Layout><Profile/></Layout>}/>
             <Route path='/myapplications' element={<Layout><MyApplications/></Layout>}/>
-            <Route path='/post-matric-sbc-eligibility-criteria' element={<Post_mat_SBC/>}/>
-            <Route path='/post-matric-vjnt-eligibility-criteria' element={<Post_mat_VJNT/>}/>
-            <Route path='/post-matric-obc-eligibility-criteria' element={<Post_mat_OBC/>}/>
-            <Route path='/post-matric-sbc-form' element={<SchemeForm caste="SBC"/>}/>
-            <Route path='/post-matric-obc-form' element={<SchemeForm caste="OBC"/>}/>
-            <Route path='/post-matric-vjnt-form' element={<SchemeForm caste="VJNT"/>}/>
+            <Route path='/eligible-schemes' element={<Layout><EligibleSchemes/></Layout>}/>
+            <Route path='/eligible-schemes/post-matric-sbc-eligibility-criteria' element={<Layout><Post_mat_SBC/></Layout>}/>
+            <Route path='/eligible-schemes/post-matric-vjnt-eligibility-criteria' element={<Layout><Post_mat_VJNT/></Layout>}/>
+            <Route path='/eligible-schemes/post-matric-obc-eligibility-criteria' element={<Layout><Post_mat_OBC/></Layout>}/>
+            <Route path='/post-matric-sbc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to SBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
+            <Route path='/post-matric-obc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to OBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
+            <Route path='/post-matric-vjnt-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to VJNT students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>                                                       }/>
             <Route path='/admin-login' element={<AdminLogin title="Admin"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
             <Route path='/officer-dashboard' element={<OfficerDashboard/>}/>

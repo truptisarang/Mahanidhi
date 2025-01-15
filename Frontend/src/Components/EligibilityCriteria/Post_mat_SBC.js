@@ -220,7 +220,7 @@ const Post_mat_SBC = () => {
           <div>8. <b>Leaving Certificate</b></div>
           <div>9. <b>Declaration certificate of parents/guardians about number of children beneficiaries.</b></div>
         </div>
-        <center><Button variant='contained'>apply</Button></center>
+        <center><Button style={{marginTop:"1rem"}} variant='contained' href="/post-matric-sbc-form">apply</Button></center>
       </div>
     </>
   );

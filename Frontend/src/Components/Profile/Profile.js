@@ -40,7 +40,6 @@ const Profile = () =>{
         {activeStep === 0 && <PersonalInfo activeStep={{activeStep,setactiveStep}} steps={steps}/>}
         {activeStep === 1 && <AddressInfo nextHandler={handleNext} backHandler={handleBack}/>}
         {activeStep === 2 && <CurrentCourse nextHandler={handleNext} backHandler={handleBack}/>}
-        {/* {activeStep === 3 && <PastQualification/>} */}
         {activeStep === 3 && <Hostel backHandler={handleBack}/>}
         </>
     )

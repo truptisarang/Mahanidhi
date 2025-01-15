@@ -1,18 +1,20 @@
 import { NavLink } from "react-router-dom"
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import FeedIcon from '@mui/icons-material/Feed';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import PersonIcon from '@mui/icons-material/Person';
+import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import "../Dashboard/Sidebar.css"
 import { useSelector } from "react-redux";
 
 const Sidebar = () =>{
+
     const username = useSelector((state)=>state.Profile.username)
     const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
 
     const links = [
         {icons:<DashboardIcon/>, to:"/dashboard", text:"Dashboard", restricted:true},
         {icons:<FeedIcon/>, to:"/myapplications", text:"My applications", restricted:true},
+        {icons:<ChecklistOutlinedIcon/>, to:"/eligible-schemes", text:"Eligible Schemes", restricted:false},
         {icons:<PersonIcon/>, to:"/profile", text:"Profile", restricted:false},
     ]
     return (

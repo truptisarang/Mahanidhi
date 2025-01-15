@@ -14,6 +14,10 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import "../Forms/Form.css";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
+
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -27,25 +31,76 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 const SchemeForm = (props) => {
+  const aadhaar = useSelector((state) => state.Profile.aadhaar);
+ 
+  const [FormData, setFormData] = useState({
+    schemeName:props.schemeName,
+    deptName:props.deptName,
+    IsRenewal: "No",
+    MahaESchoolAppID: "",
+    LeavingCert: {
+      file_name: "",
+      file: "",
+    },
+    ParentDeclaration: {
+      file_name: "",
+      file: "",
+    },
+    CasteValidity: {
+      file_name: "",
+      file: "",
+    },
+    RationCard: {
+      file_name: "",
+      file: "",
+    },
+    NoOfMaleChildren: "",
+  });
+
+  const submitForm = async () => {
+    try {
+      
+      const response = await axios.post("http://localhost:5000/submitForm", {
+        form_data: FormData,
+        Aadhaar:aadhaar
+      });
+      if (response.data.msg) {
+        toast.success("Application submitted successfully",response.data.msg);
+      }
+    } catch (error) {
+      toast.error("Error", error);
+    }
+  };
+
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        rtl={false}
+        theme="colored"
+      />
       <div style={{ margin: "2rem" }}>
-        <h3>Post matric scholarship to {props.caste}</h3>
+        <h3>{props.schemeName}</h3>
+        <p>{props.deptName}</p>
         <div id="form_container">
           <div id="labels">
             <div id="row">
-              <FormLabel>Is this renewal application?</FormLabel>
+              <FormLabel required>Is this renewal application?</FormLabel>
+            </div>
+            {FormData.IsRenewal === "Yes" && (
+              <div id="row">
+                <FormLabel required>
+                  Enter your last year MahaEschool Application ID
+                </FormLabel>
+              </div>
+            )}
+            <div id="row">
+              <FormLabel required>Leaving Certificate</FormLabel>
             </div>
             <div id="row">
-              <FormLabel>
-                Enter your last year MahaEschool Application ID
-              </FormLabel>
-            </div>
-            <div id="row">
-              <FormLabel>Leaving Certificate</FormLabel>
-            </div>
-            <div id="row">
-              <FormLabel>
+              <FormLabel required>
                 Declaration of parent's or guardian about number of children
                 beneficiaries
               </FormLabel>
@@ -58,12 +113,12 @@ const SchemeForm = (props) => {
               </FormLabel>
             </div>
             <div id="row">
-              <FormLabel>
+              <FormLabel required>
                 Ration Card - to identify number of children in family
               </FormLabel>
             </div>
             <div id="row">
-              <FormLabel>
+              <FormLabel required>
                 Enter the number of male children (including yourself) in your
                 family with the same parents
               </FormLabel>
@@ -73,20 +128,30 @@ const SchemeForm = (props) => {
             <div id="row">
               <RadioGroup
                 row
-                // defaultValue={HaveCC}
-                // value={HaveCC}
-                // onChange={(e) => {
-                //   setHaveCC(e.target.value);
-                // }}
+                value={FormData.IsRenewal}
+                onChange={(e) => {
+                  setFormData({ ...FormData, IsRenewal: e.target.value });
+                }}
                 name="radio-buttons-group"
               >
                 <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
                 <FormControlLabel value="No" control={<Radio />} label="No" />
               </RadioGroup>
             </div>
-            <div>
-              <TextField style={{ width: "80%" }}></TextField>
-            </div>
+            {FormData.IsRenewal === "Yes" && (
+              <div>
+                <TextField
+                  style={{ width: "80%" }}
+                  value={FormData.MahaESchoolAppID}
+                  onChange={(e) => {
+                    setFormData({
+                      ...FormData,
+                      MahaESchoolAppID: e.target.value,
+                    });
+                  }}
+                ></TextField>
+              </div>
+            )}
             <div>
               <Button
                 component="label"
@@ -97,12 +162,55 @@ const SchemeForm = (props) => {
               >
                 Upload Leaving Certificate
                 <VisuallyHiddenInput
-                // type="file"
-                // onChange={(event) => setFiles(event.target.files)}
-                // accept=".pdf, .jpeg, .jpg"
+                  type="file"
+                  required
+                  onChange={(event) => {
+                    const CCfile = event.target.files[0];
+                    if (!CCfile) {
+                      setFormData({ ...FormData.LeavingCert, LeavingCert: "" });
+                      toast.error("Please upload leaving certificate");
+                      return;
+                    } else {
+                      const filesize = CCfile.size / 1024;
+                      if (filesize > 256 || filesize < 15) {
+                        toast.error("File size should between 15 and 256 kb");
+                      } else {
+                        console.log(CCfile.name);
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          LeavingCert: {
+                            ...prevState.LeavingCert,
+                            file_name: CCfile.name,
+                          },
+                        }));
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setFormData((prevState) => ({
+                            ...prevState,
+                            LeavingCert: {
+                              ...prevState.LeavingCert,
+                              file: reader.result,
+                            },
+                          }));
+                        };
+                        reader.readAsDataURL(CCfile);
+                      }
+                    }
+                  }}
+                  accept=".pdf, .jpeg, .jpg"
                 />
-              </Button>
-              {/* {Files && <span style={{ fontSize: ".8rem" }}>{Files[0].name}</span>} */}
+              </Button><br></br>
+              {FormData?.LeavingCert && (
+                <>
+                  <a
+                    style={{ fontSize: ".8rem" }}
+                    href={FormData?.LeavingCert.file}
+                    download={FormData?.LeavingCert.file_name}
+                  >
+                    {FormData?.LeavingCert.file_name}
+                  </a>
+                </>
+              )}
             </div>
             <div>
               <Button
@@ -114,12 +222,54 @@ const SchemeForm = (props) => {
               >
                 Upload Declaration
                 <VisuallyHiddenInput
-                // type="file"
-                // onChange={(event) => setFiles(event.target.files)}
-                // accept=".pdf, .jpeg, .jpg"
+                  type="file"
+                  required
+                  onChange={(event) => {
+                    const CCfile = event.target.files[0];
+                    if (!CCfile) {
+                      setFormData({ ...FormData.ParentDeclaration, ParentDeclaration: "" });
+                      toast.error("Please upload declaration");
+                      return;
+                    } else {
+                      const filesize = CCfile.size / 1024;
+                      if (filesize > 256 || filesize < 15) {
+                        toast.error("File size should between 15 and 256 kb");
+                      } else {
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          ParentDeclaration: {
+                            ...prevState.ParentDeclaration,
+                            file_name: CCfile.name,
+                          },
+                        }));
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setFormData((prevState) => ({
+                            ...prevState,
+                            ParentDeclaration: {
+                              ...prevState.ParentDeclaration,
+                              file: reader.result,
+                            },
+                          }));
+                        };
+                        reader.readAsDataURL(CCfile);
+                      }
+                    }
+                  }}
+                  accept=".pdf, .jpeg, .jpg"
                 />
-              </Button>
-              {/* {Files && <span style={{ fontSize: ".8rem" }}>{Files[0].name}</span>} */}
+              </Button><br></br>
+              {FormData?.ParentDeclaration && (
+                <>
+                  <a
+                    style={{ fontSize: ".8rem" }}
+                    href={FormData?.ParentDeclaration.file}
+                    download={FormData?.ParentDeclaration.file_name}
+                  >
+                    {FormData?.ParentDeclaration.file_name}
+                  </a>
+                </>
+              )}
             </div>
             <div>
               <Button
@@ -129,14 +279,56 @@ const SchemeForm = (props) => {
                 tabIndex={-1}
                 startIcon={<CloudUploadIcon />}
               >
-                Upload Caste Validity
+                Upload Caste Validity Certificate
                 <VisuallyHiddenInput
-                // type="file"
-                // onChange={(event) => setFiles(event.target.files)}
-                // accept=".pdf, .jpeg, .jpg"
+                  type="file"
+                  required
+                  onChange={(event) => {
+                    const CCfile = event.target.files[0];
+                    if (!CCfile) {
+                      setFormData({ ...FormData.CasteValidity, CasteValidity: ""});
+                      toast.error("Please upload caste validity certificate");
+                      return;
+                    } else {
+                      const filesize = CCfile.size / 1024;
+                      if (filesize > 256 || filesize < 15) {
+                        toast.error("File size should between 15 and 256 kb");
+                      } else {
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          CasteValidity: {
+                            ...prevState.CasteValidity,
+                            file_name: CCfile.name,
+                          },
+                        }));
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setFormData((prevState) => ({
+                            ...prevState,
+                            CasteValidity: {
+                              ...prevState.CasteValidity,
+                              file: reader.result,
+                            },
+                          }));
+                        };
+                        reader.readAsDataURL(CCfile);
+                      }
+                    }
+                  }}
+                  accept=".pdf, .jpeg, .jpg"
                 />
-              </Button>
-              {/* {Files && <span style={{ fontSize: ".8rem" }}>{Files[0].name}</span>} */}
+              </Button><br></br>
+              {FormData?.CasteValidity && (
+                <>
+                  <a
+                    style={{ fontSize: ".8rem" }}
+                    href={FormData?.CasteValidity.file}
+                    download={FormData?.CasteValidity.file_name}
+                  >
+                    {FormData?.CasteValidity.file_name}
+                  </a>
+                </>
+              )}
             </div>
             <div>
               <Button
@@ -148,12 +340,54 @@ const SchemeForm = (props) => {
               >
                 Upload Ration Card
                 <VisuallyHiddenInput
-                // type="file"
-                // onChange={(event) => setFiles(event.target.files)}
-                // accept=".pdf, .jpeg, .jpg"
+                  type="file"
+                  required
+                  onChange={(event) => {
+                    const CCfile = event.target.files[0];
+                    if (!CCfile) {
+                      setFormData({ ...FormData.RationCard, RationCard: "" });
+                      toast.error("Please upload declaration");
+                      return;
+                    } else {
+                      const filesize = CCfile.size / 1024;
+                      if (filesize > 256 || filesize < 15) {
+                        toast.error("File size should between 15 and 256 kb");
+                      } else {
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          RationCard: {
+                            ...prevState.RationCard,
+                            file_name: CCfile.name,
+                          },
+                        }));
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                          setFormData((prevState) => ({
+                            ...prevState,
+                            RationCard: {
+                              ...prevState.RationCard,
+                              file: reader.result,
+                            },
+                          }));
+                        };
+                        reader.readAsDataURL(CCfile);
+                      }
+                    }
+                  }}
+                  accept=".pdf, .jpeg, .jpg"
                 />
-              </Button>
-              {/* {Files && <span style={{ fontSize: ".8rem" }}>{Files[0].name}</span>} */}
+              </Button><br></br>
+              {FormData?.RationCard && (
+                <>
+                  <a
+                    style={{ fontSize: ".8rem" }}
+                    href={FormData?.RationCard.file}
+                    download={FormData?.RationCard.file_name}
+                  >
+                    {FormData?.RationCard.file_name}
+                  </a>
+                </>
+              )}
             </div>
             <div>
               <TextField
@@ -163,6 +397,7 @@ const SchemeForm = (props) => {
                   if (value.length >= 0) {
                     e.target.value = value.slice(0, 1);
                   }
+                  setFormData({...FormData, NoOfMaleChildren:e.target.value})
                 }}
                 onKeyDown={(e) => {
                   if (
@@ -180,6 +415,11 @@ const SchemeForm = (props) => {
             </div>
           </div>
         </div>
+        <Box display="flex" justifyContent="center" alignItems="center" padding={"1rem"}>
+          <Button variant="contained" color="success" onClick={submitForm}>
+            Submit
+          </Button>
+        </Box>
       </div>
     </>
   );

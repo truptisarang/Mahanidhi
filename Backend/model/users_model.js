@@ -8,7 +8,13 @@ const userSchema = mongoose.Schema({
           photo: String,
           PhoneNumber: String,
           Username:String,
-          Password:String,
+          Password: String,
+          BeneficiaryCat: String,
+          PersonalInfo:{},
+          CourseDetails:[],
+          Applications:[
+            {status:{type:String, default:"Pending"}}
+          ],
           isProfileCompleted:{type:Boolean, default:false}
         })
 const userModel = new mongoose.model("users", userSchema)
