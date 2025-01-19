@@ -38,27 +38,78 @@ const Login = (props) =>{
           e.preventDefault();
         }
       }
-      
-    const handleLogin = async (e) =>{
-     try{
-      const response = await axios.post("http://localhost:5000/login",{Username, Password})
-      if(response.data.success === true) {
-        dispatch(setProfileCompletionStatus({isProfileCompleted:response.data.isProfileCompleted, username:response.data.Username, aadhaar:response.data.Aadhaar}))
-        toast.success(response.data.message);
-        setOTPsent(true);
-      }else{
-        toast.error(response.data.message);
-      }
-     } catch(error){
-      toast.error(error)
-     }
+    
+    
+    const handleOfficerLogin = async (e) =>{
+      try {
+        const response = await axios.post("http://localhost:5000/officerLogin", { Username, Password });
+        if (response.data.success === true) {
+            dispatch(setProfileCompletionStatus({
+                username: response.data.data.Username,
+            }));
+            toast.success(response.data.message);
+            setOTPsent(true);
+        } else {
+            toast.error(response.data.message);  // Message from backend in case of failure
+        }
+    } catch (error) {
+        // Enhanced error handling
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            toast.error(`Error: ${error.response.data.message || 'Something went wrong!'}`);
+        } else if (error.request) {
+            // The request was made but no response was received
+            toast.error('No response from the server. Please try again later.');
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            toast.error(`Error: ${error.message}`);
+        }
+    }
     }
 
+    const handleLogin = async (e) => {
+      try {
+          const response = await axios.post("http://localhost:5000/login", { Username, Password });
+  
+          // Check if the response indicates success
+          if (response.data.success === true) {
+              dispatch(setProfileCompletionStatus({
+                  isProfileCompleted: response.data.isProfileCompleted,
+                  username: response.data.Username,
+                  aadhaar: response.data.Aadhaar
+              }));
+              toast.success(response.data.message);
+              setOTPsent(true);
+          } else {
+              toast.error(response.data.message);  // Message from backend in case of failure
+          }
+      } catch (error) {
+          // Enhanced error handling
+          if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              toast.error(`Error: ${error.response.data.message || 'Something went wrong!'}`);
+          } else if (error.request) {
+              // The request was made but no response was received
+              toast.error('No response from the server. Please try again later.');
+          } else {
+              // Something happened in setting up the request that triggered an Error
+              toast.error(`Error: ${error.message}`);
+          }
+      }
+  };
+  
+
     const handleNavigation = () =>{
-      if(!isProfileCompleted){
-        navigate("/profile")
+      if(props.title === "Officer"){
+        navigate("/officer-dashboard")
       }else{
-        navigate("/dashboard")
+        if(!isProfileCompleted){
+                navigate("/profile")
+        }else{
+          navigate("/dashboard")
+        }
       }
     }
 
@@ -112,11 +163,11 @@ const Login = (props) =>{
                             <a href="#">Forgot Password? </a> &nbsp;&nbsp;
                             <a href="#">Forgot Username? </a>
                     </div>
-                    <Button variant="contained" onClick={handleLogin}>Login</Button>
+                    <Button variant="contained" disabled={Username === "" || Password === ""} onClick={props.title==="Officer" ? handleOfficerLogin : handleLogin}>Login</Button>
                     {
                       OTPsent &&
                       <>
-                       <MuiOtpInput id='otp' value={OTP} onChange={setOTP} length={6} gap={0.5} autoFocus />                  
+                       <MuiOtpInput id='otp' value={OTP} onChange={setOTP}  length={6} gap={0.5} autoFocus />                  
                        <Button variant="contained" disabled={OTP.length !== 6} onClick={handleNavigation}>Verify OTP</Button>
                       </>
                     }

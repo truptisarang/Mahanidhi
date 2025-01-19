@@ -17,6 +17,7 @@ import {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from 'axios';
 
 const style = {
   position: "absolute",
@@ -36,6 +37,17 @@ const OfficerDashboard = () => {
   const closeEModal = () => setopenEditModal(false);
   const openDModal = () => setopenDeleteModal(true);
   const closeDModal = () => setopenDeleteModal(false);
+  
+
+  const getApplications = async() =>{
+    try{
+      const response = await axios.post("http://localhost:5000/getApplications", {mode:"officer"})
+      
+    }catch(error){
+      console.log(error)
+    }
+  }
+
 
   return (
     <div style={{ margin: "1rem" }}>

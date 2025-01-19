@@ -40,7 +40,7 @@ function App() {
         <Routes>
             <Route path='/' element={<Home/>}/>
             <Route path='/registration' element={<RegistrationForm />}/>
-            <Route path='/login' element={<Login/>}/>
+            <Route path='/login' element={<Login props=""/>}/>
             <Route path='/dashboard' element={<Layout><Dashboard/></Layout>}/>
             <Route path='/profile' element={<Layout><Profile/></Layout>}/>
             <Route path='/myapplications' element={<Layout><MyApplications/></Layout>}/>
@@ -51,7 +51,7 @@ function App() {
             <Route path='/post-matric-sbc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to SBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
             <Route path='/post-matric-obc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to OBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
             <Route path='/post-matric-vjnt-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to VJNT students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>                                                       }/>
-            <Route path='/admin-login' element={<AdminLogin title="Admin"/>}/>
+            <Route path='/officer-login' element={<AdminLogin title="Officer"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
             <Route path='/officer-dashboard' element={<OfficerDashboard/>}/>
             <Route path='*' element={<Error/>}/>

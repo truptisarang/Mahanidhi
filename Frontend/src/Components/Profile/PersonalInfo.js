@@ -658,6 +658,7 @@ const PersonalInfo = (props) => {
                   variant="outlined"
                   label="Family Annual Income"
                   required
+                  value = {PersonalInfo.IncomeDetails}
                   error={Errors && Errors.FI}
                   helperText={Errors.FI}
                   onChange={(e) => {

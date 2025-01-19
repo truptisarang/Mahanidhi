@@ -18,7 +18,6 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 
-
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
   clipPath: "inset(50%)",
@@ -32,10 +31,10 @@ const VisuallyHiddenInput = styled("input")({
 });
 const SchemeForm = (props) => {
   const aadhaar = useSelector((state) => state.Profile.aadhaar);
- 
+
   const [FormData, setFormData] = useState({
-    schemeName:props.schemeName,
-    deptName:props.deptName,
+    schemeName: props.schemeName,
+    deptName: props.deptName,
     IsRenewal: "No",
     MahaESchoolAppID: "",
     LeavingCert: {
@@ -57,18 +56,60 @@ const SchemeForm = (props) => {
     NoOfMaleChildren: "",
   });
 
-  const submitForm = async () => {
+  const submitForm = async (e) => {
     try {
-      
+      e.preventDefault();
+      if (validateForm()) {
+        return;
+      }
       const response = await axios.post("http://localhost:5000/submitForm", {
         form_data: FormData,
-        Aadhaar:aadhaar
+        Aadhaar: aadhaar,
       });
       if (response.data.msg) {
-        toast.success("Application submitted successfully",response.data.msg);
+        toast.success("Application submitted successfully", response.data.msg);
+        setFormData({
+          schemeName: props.schemeName,
+          deptName: props.deptName,
+          IsRenewal: "No",
+          MahaESchoolAppID: "",
+          LeavingCert: {
+            file_name: "",
+            file: "",
+          },
+          ParentDeclaration: {
+            file_name: "",
+            file: "",
+          },
+          CasteValidity: {
+            file_name: "",
+            file: "",
+          },
+          RationCard: {
+            file_name: "",
+            file: "",
+          },
+          NoOfMaleChildren: "",
+        });
       }
     } catch (error) {
-      toast.error("Error", error);
+      console.log(error)
+      toast.error("Error", error.response);
+    }
+  };
+
+  const validateForm = () => {
+    if (
+      FormData.IsRenewal === "" ||
+      FormData.LeavingCert === "" ||
+      FormData.ParentDeclaration === "" ||
+      FormData.RationCard === "" ||
+      FormData.NoOfMaleChildren === ""
+    ) {
+      toast.error("Please fill all the fields");
+      return true;
+    } else {
+      return false;
     }
   };
 
@@ -199,7 +240,8 @@ const SchemeForm = (props) => {
                   }}
                   accept=".pdf, .jpeg, .jpg"
                 />
-              </Button><br></br>
+              </Button>
+              <br></br>
               {FormData?.LeavingCert && (
                 <>
                   <a
@@ -227,7 +269,10 @@ const SchemeForm = (props) => {
                   onChange={(event) => {
                     const CCfile = event.target.files[0];
                     if (!CCfile) {
-                      setFormData({ ...FormData.ParentDeclaration, ParentDeclaration: "" });
+                      setFormData({
+                        ...FormData.ParentDeclaration,
+                        ParentDeclaration: "",
+                      });
                       toast.error("Please upload declaration");
                       return;
                     } else {
@@ -258,7 +303,8 @@ const SchemeForm = (props) => {
                   }}
                   accept=".pdf, .jpeg, .jpg"
                 />
-              </Button><br></br>
+              </Button>
+              <br></br>
               {FormData?.ParentDeclaration && (
                 <>
                   <a
@@ -286,7 +332,10 @@ const SchemeForm = (props) => {
                   onChange={(event) => {
                     const CCfile = event.target.files[0];
                     if (!CCfile) {
-                      setFormData({ ...FormData.CasteValidity, CasteValidity: ""});
+                      setFormData({
+                        ...FormData.CasteValidity,
+                        CasteValidity: "",
+                      });
                       toast.error("Please upload caste validity certificate");
                       return;
                     } else {
@@ -317,7 +366,8 @@ const SchemeForm = (props) => {
                   }}
                   accept=".pdf, .jpeg, .jpg"
                 />
-              </Button><br></br>
+              </Button>
+              <br></br>
               {FormData?.CasteValidity && (
                 <>
                   <a
@@ -376,7 +426,8 @@ const SchemeForm = (props) => {
                   }}
                   accept=".pdf, .jpeg, .jpg"
                 />
-              </Button><br></br>
+              </Button>
+              <br></br>
               {FormData?.RationCard && (
                 <>
                   <a
@@ -397,7 +448,10 @@ const SchemeForm = (props) => {
                   if (value.length >= 0) {
                     e.target.value = value.slice(0, 1);
                   }
-                  setFormData({...FormData, NoOfMaleChildren:e.target.value})
+                  setFormData({
+                    ...FormData,
+                    NoOfMaleChildren: e.target.value,
+                  });
                 }}
                 onKeyDown={(e) => {
                   if (
@@ -415,7 +469,12 @@ const SchemeForm = (props) => {
             </div>
           </div>
         </div>
-        <Box display="flex" justifyContent="center" alignItems="center" padding={"1rem"}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          padding={"1rem"}
+        >
           <Button variant="contained" color="success" onClick={submitForm}>
             Submit
           </Button>
