@@ -185,6 +185,7 @@ const MyApplications = () => {
                 <TableCell align="center">ApplicationID</TableCell>
                 <TableCell align="center">Department Name</TableCell>
                 <TableCell align="center">Scheme Name</TableCell>
+                <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Status</TableCell>
                 <TableCell align="center">Action</TableCell>
                 <TableCell align="center">View</TableCell>
@@ -196,6 +197,7 @@ const MyApplications = () => {
                   <TableCell>{app?.applicationId}</TableCell>
                   <TableCell>{app?.Data?.deptName}</TableCell>
                   <TableCell>{app?.Data?.schemeName}</TableCell>
+                  <TableCell>{app?.Date}</TableCell>
                   <TableCell>{app?.status}</TableCell>
                   <TableCell align="right">
                     <Button

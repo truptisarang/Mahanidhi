@@ -1,6 +1,7 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit"
 // import {profileCompletedSlice} from "./slices/profile_completion_slice"
 import profileCompletedSliceReducer from "./slices/profile_completion_slice"
+import officerSliceReducer from "./slices/officer_slice"
 import {persistReducer} from "redux-persist"
 import { encryptTransform } from 'redux-persist-transform-encrypt'
 import storage from 'redux-persist/lib/storage'
@@ -19,7 +20,8 @@ const persistConfig = {
 }
 
 const reducer = combineReducers({
-    Profile:profileCompletedSliceReducer
+    Profile:profileCompletedSliceReducer,
+    Officer:officerSliceReducer
 })
 
 const PersistReducer = persistReducer(persistConfig, reducer)

@@ -9,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {useDispatch} from 'react-redux'
 import {setProfileCompletionStatus} from "../../redux/slices/profile_completion_slice";
+import {setOfficer} from "../../redux/slices/officer_slice";
 import { useSelector } from "react-redux";
 
 const Login = (props) =>{
@@ -22,6 +23,8 @@ const Login = (props) =>{
 
     const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
     const uname = useSelector((state)=>state.Profile.username)
+    const role = useSelector((state)=>state.Officer.role)
+
     console.log(isProfileCompleted)
     console.log(uname)
 
@@ -44,8 +47,10 @@ const Login = (props) =>{
       try {
         const response = await axios.post("http://localhost:5000/officerLogin", { Username, Password });
         if (response.data.success === true) {
-            dispatch(setProfileCompletionStatus({
-                username: response.data.data.Username,
+            dispatch(setOfficer({
+                username: response.data.data.FullName,
+                deptName: response.data.data.DeptName,
+                role: response.data.data.Role
             }));
             toast.success(response.data.message);
             setOTPsent(true);
@@ -99,14 +104,17 @@ const Login = (props) =>{
           }
       }
   };
-  
+
+    
 
     const handleNavigation = () =>{
-      if(props.title === "Officer"){
-        navigate("/officer-dashboard")
+      if(role === "Officer"){
+        navigate('/officer-dashboard')
+      }else if(role === "Admin"){
+        navigate('/admin-dashboard')
       }else{
         if(!isProfileCompleted){
-                navigate("/profile")
+          navigate("/profile")
         }else{
           navigate("/dashboard")
         }
@@ -122,7 +130,7 @@ const Login = (props) =>{
                 rtl={false}
                 pauseOnFocusLoss
                 pauseOnHover
-                theme="dark"
+                theme="colored"
               />
 
             <div id="loginContainer">

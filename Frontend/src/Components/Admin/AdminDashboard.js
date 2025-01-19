@@ -43,14 +43,17 @@ const AdminDashboard = () => {
   const [ConfirmDelete, setConfirmDelete] = useState(false); // Modal visibility
   const [DeleteAppID, setDeleteAppID] = useState(null); // AppID to delete
   const [EnteredAppID, setEnteredAppID] = useState(""); // AppID to delete
-
+  const departments = [
+    "OBC, SEBC, VJNT & SBC Welfare Department",
+    "IT",
+  ];
   const openEModal = () => setopenEditModal(true);
   const closeEModal = () => setopenEditModal(false);
 
   const closeDeleteModal = () => {
     setConfirmDelete(false); // Close the modal
     setDeleteAppID(null); // Clear the application ID
-    setEnteredAppID("")
+    setEnteredAppID("");
   };
 
   const openDeleteModal = (officerid) => {
@@ -89,26 +92,22 @@ const AdminDashboard = () => {
 
   const handleDelete = async (officerid) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5000/deleteOfficer",
-        {
-          officer_id: DeleteAppID,
-        }
-      );
+      const response = await axios.post("http://localhost:5000/deleteOfficer", {
+        officer_id: DeleteAppID,
+      });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setConfirmDelete(false)
-        setEnteredAppID("")
+        setConfirmDelete(false);
+        setEnteredAppID("");
       } else {
         toast.error("Failed to delete the user");
       }
     } catch (error) {
-     console.log(error)
+      console.log(error);
       toast.error("An error occurred while attempting to delete the user.");
     }
   };
-
 
   //   const validate = () => {
   //     const newErrors = {};
@@ -462,13 +461,23 @@ const AdminDashboard = () => {
 
               {/* Department and Designation */}
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="Department"
-                  name="department"
-                  value={officerData.department}
-                  onChange={handleInputChange}
-                />
+                <FormControl fullWidth>
+                  <InputLabel id="department-label">Department</InputLabel>
+                  <Select
+                    labelId="department-label"
+                    id="department-select"
+                    name="department"
+                    value={officerData.department}
+                    onChange={handleInputChange}
+                    label="Department"
+                  >
+                    {departments.map((dept, index) => (
+                      <MenuItem key={index} value={dept}>
+                        {dept}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -528,7 +537,10 @@ const AdminDashboard = () => {
                   <TableCell>{row.LastLogin}</TableCell>
                   <TableCell>
                     <Box display={"flex"} alignItems={"center"} gap={"1rem"}>
-                      <IconButton color="warning" onClick={() => openDeleteModal(row.OfficerID)}>
+                      <IconButton
+                        color="warning"
+                        onClick={() => openDeleteModal(row.OfficerID)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Box>

@@ -65,6 +65,7 @@ const SchemeForm = (props) => {
       const response = await axios.post("http://localhost:5000/submitForm", {
         form_data: FormData,
         Aadhaar: aadhaar,
+        date:new Date().toISOString()
       });
       if (response.data.msg) {
         toast.success("Application submitted successfully", response.data.msg);

@@ -1,7 +1,7 @@
 const application_model = require("../../model/application_model")
 
 const submit_application_controller = async(req, res) =>{
-    const {form_data, Aadhaar} = req.body;
+    const {form_data, Aadhaar, date} = req.body;
     const generateApplicationID = () =>{
         const prefix="MN"
         const timestamp = Date.now().toString();
@@ -13,7 +13,7 @@ const submit_application_controller = async(req, res) =>{
         Data:{...form_data},  
         applicationId:AppID,
         AadhaarNumber:Aadhaar,
-        Date:new Date()
+        Date:date
     };
     try{
         const response = await application_model.create(applicationDataWithID)
