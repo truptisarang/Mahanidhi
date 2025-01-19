@@ -1,4 +1,4 @@
-const userModel = require("../../model/users_model")
+const application_model = require("../../model/application_model")
 
 const submit_application_controller = async(req, res) =>{
     const {form_data, Aadhaar} = req.body;
@@ -10,11 +10,13 @@ const submit_application_controller = async(req, res) =>{
     }
     const AppID = generateApplicationID();
     const applicationDataWithID = {
-        ...form_data,  
-        AppID  
+        Data:{...form_data},  
+        applicationId:AppID,
+        AadhaarNumber:Aadhaar,
+        Date:new Date()
     };
     try{
-        const response = await userModel.findOneAndUpdate({AadhaarNumber:Aadhaar},{$push:{Applications:applicationDataWithID}})
+        const response = await application_model.create(applicationDataWithID)
         if(response){
             res.json({msg:AppID})
         }

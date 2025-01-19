@@ -12,9 +12,6 @@ const userSchema = mongoose.Schema({
           BeneficiaryCat: String,
           PersonalInfo:{},
           CourseDetails:[],
-          Applications:[
-            {status:{type:String, default:"Pending"}}
-          ],
           isProfileCompleted:{type:Boolean, default:false}
         })
 const userModel = new mongoose.model("users", userSchema)
