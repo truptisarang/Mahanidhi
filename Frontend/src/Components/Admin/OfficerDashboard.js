@@ -40,13 +40,12 @@ const style = {
 };
 const OfficerDashboard = () => {
   const [openViewModal, setopenViewModal] = useState(false);
-  const [openDeleteModal, setopenDeleteModal] = useState(false);
-  // const openEModal = () => setopenEditModal(true);
-  // const closeEModal = () => setopenEditModal(false);
-  const openDModal = () => setopenDeleteModal(true);
-  const closeDModal = () => setopenDeleteModal(false);
   const [Applications, setApplications] = useState([]);
   const [SelectedApplication, setSelectedApplication] = useState([]);
+  const [OpenApproveModal, setOpenApproveModal] = useState(false);
+  const [OpenRejectModal, setOpenRejectModal] = useState(false);
+  const [EnteredAppID, setEnteredAppID] = useState("");
+  const [Reason, setReason] = useState()
 
   const handleOpenViewModal = (appData) => {
     setopenViewModal(true);
@@ -74,6 +73,24 @@ const OfficerDashboard = () => {
     getApplications();
   }, []);
 
+  const updateStatus = async (data) => {
+    try {
+      const response = await axios.patch("http://localhost:5000/updateStatus", {
+        Data: data,
+      });
+      if (response.data.success === true) {
+        toast.success("Form Accepted!!");
+        setOpenApproveModal(false);
+      }
+    } catch (error) {
+      toast.error("Error while approving the application. Please try again");
+    }
+  };
+
+  const handleAcceptApp = (data) => {
+    updateStatus(data);
+  };
+
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
@@ -88,25 +105,110 @@ const OfficerDashboard = () => {
         theme="colored"
       />
       <h2>Officer Dashboard</h2>
-      {/* <Modal
-        open={openEditModal}
-        onClose={closeEModal}
+      <Modal
+        open={OpenApproveModal}
+        onClose={(e) => setOpenApproveModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-     
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Edit
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            <center>
+              Are you sure you want to accept the application ? <br></br>{" "}
+            </center>
+            <center>To confirm please enter application id</center>
+            <center>
+              <strong>{SelectedApplication?.applicationId}</strong>
+            </center>
           </Typography>
-          <Box display={"flex"} margin={'1rem'} alignItems={"center"} justifyContent={"center"} flexDirection={'column'} gap="1rem">
-              <TextField fullWidth label="UserID">UserID</TextField>
-              <TextField fullWidth label="Name">Name</TextField>
-              <TextField fullWidth label="EmailID">EmailID</TextField>
-              <Button variant="contained">Edit</Button>
+          <Box
+            display={"flex"}
+            margin={"1rem"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+            gap="1rem"
+          >
+            <TextField
+              fullWidth
+              label="Enter Application ID"
+              onChange={(e) => setEnteredAppID(e.target.value)}
+              value={EnteredAppID}
+              error={
+                EnteredAppID !== "" &&
+                EnteredAppID !== SelectedApplication?.applicationId
+              }
+              helperText={
+                EnteredAppID !== "" &&
+                EnteredAppID !== SelectedApplication?.applicationId
+                  ? "Application ID does not match"
+                  : ""
+              }
+            >
+              Enter Application ID
+            </TextField>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={(e) =>
+                handleAcceptApp({ appid: EnteredAppID, status: "Approved" })
+              }
+              disabled={EnteredAppID !== SelectedApplication?.applicationId}
+            >
+              Approve
+            </Button>
           </Box>
         </Box>
-      </Modal> */}
+      </Modal>
+
+      <Modal
+        open={OpenRejectModal}
+        onClose={(e) => setOpenRejectModal(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography variant="h6" component={"h5"} color="red" gutterBottom>
+            <center>Reject</center>
+          </Typography>
+          <Typography variant="body2" color="textSecondary" gutterBottom>
+            <center>
+              Are you sure you want to reject the application ? <br></br>{" "}
+            </center>
+            <center>Enter reason for rejection</center>
+          </Typography>
+          <Box
+            display={"flex"}
+            margin={"1rem"}
+            alignItems={"center"}
+            justifyContent={"center"}
+            flexDirection={"column"}
+            gap="1rem"
+          >
+            <TextField
+              fullWidth
+              label="Reason for rejection"
+              onChange={(e) => setReason(e.target.value)}
+              value={Reason}
+              error={Reason == "" }
+              helperText={Reason == "" && "Enter Reason for rejection"}
+            >
+              Enter Application ID
+            </TextField>
+            <Button
+              variant="contained"
+              color="warning"
+              onClick={(e) =>
+                handleAcceptApp({ appid: SelectedApplication?.applicationId, status: "Reject" })
+              }
+              disabled={Reason == ""}
+            >
+              Reject
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
       <Modal
         open={openViewModal}
         aria-labelledby="modal-modal-title"
@@ -128,8 +230,16 @@ const OfficerDashboard = () => {
             overflowY: "auto",
           }}
         >
-          <div style={{display:"flex", alignItems:'center', justifyContent:'space-between'}}>
-            <h2 id="modal-modal-title">Documents</h2>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <h2 id="modal-modal-title">
+              Documents - {SelectedApplication?.applicationId}
+            </h2>
 
             <IconButton variant="contained" onClick={handleCloseViewModal}>
               <CloseIcon></CloseIcon>
@@ -197,71 +307,82 @@ const OfficerDashboard = () => {
           </div>
         </Box>
       </Modal>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead style={{ backgroundColor: "#F9EE99" }}>
-            <TableRow>
-              <TableCell>
-                <b>Sr No.</b>
-              </TableCell>
-              <TableCell>
-                <b>Application ID</b>
-              </TableCell>
-              <TableCell>
-                <b>Applicant Name</b>
-              </TableCell>
-              <TableCell>
-                <b>Department</b>
-              </TableCell>
-              <TableCell>
-                <b>Scheme Name</b>
-              </TableCell>
-              <TableCell>
-                <b>Submission Date</b>
-              </TableCell>
-              <TableCell>
-                <b>Status</b>
-              </TableCell>
-              <TableCell>
-                <b>Actions</b>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Applications.map((app, index) => {
-              return (
-                <TableRow>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>{app.applicationId}</TableCell>
-                  <TableCell>{app.applicantName}</TableCell>
-                  <TableCell>{app.Data.deptName}</TableCell>
-                  <TableCell>{app.Data.schemeName}</TableCell>
-                  <TableCell>{app.Date}</TableCell>
-                  <TableCell>{app.status}</TableCell>
-                  <TableCell>
-                    <Box display={"flex"} alignItems={"center"} gap={"1rem"}>
-                      <IconButton
-                        color="black"
-                        onClick={() => {
-                          handleOpenViewModal(app);
-                        }}
-                      >
-                        <VisibilityIcon />
-                      </IconButton>
-                      <IconButton color="success" onClick={openDModal}>
-                        <DoneAllIcon />
-                      </IconButton>
-                      <IconButton color="warning" onClick={openDModal}>
-                        <CloseIcon />
-                      </IconButton>
-                    </Box>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ width: 1000 }}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead style={{ backgroundColor: "#F9EE99" }}>
+              <TableRow>
+                <TableCell>
+                  <b>Sr No.</b>
+                </TableCell>
+                <TableCell>
+                  <b>Application ID</b>
+                </TableCell>
+                <TableCell>
+                  <b>Applicant Name</b>
+                </TableCell>
+                <TableCell>
+                  <b>Department</b>
+                </TableCell>
+                <TableCell>
+                  <b>Scheme Name</b>
+                </TableCell>
+                <TableCell>
+                  <b>Submission Date</b>
+                </TableCell>
+                <TableCell>
+                  <b>Status</b>
+                </TableCell>
+                <TableCell>
+                  <b>Actions</b>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {Applications.map((app, index) => {
+                return (
+                  <TableRow>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{app.applicationId}</TableCell>
+                    <TableCell>{app.applicantName}</TableCell>
+                    <TableCell>{app.Data.deptName}</TableCell>
+                    <TableCell>{app.Data.schemeName}</TableCell>
+                    <TableCell>{app.Date}</TableCell>
+                    <TableCell>{app.status}</TableCell>
+                    <TableCell>
+                      <Box display={"flex"} alignItems={"center"} gap={"1rem"}>
+                        <IconButton
+                          color="black"
+                          onClick={() => {
+                            handleOpenViewModal(app);
+                          }}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                        <IconButton
+                          color="success"
+                          onClick={(e) => {
+                            setOpenApproveModal(true);
+                            setSelectedApplication(app);
+                          }}
+                        >
+                          <DoneAllIcon />
+                        </IconButton>
+                        <IconButton
+                          color="warning"
+                          onClick={(e) => setOpenRejectModal(true)}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </div>
   );
 };

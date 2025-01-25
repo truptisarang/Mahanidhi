@@ -18,6 +18,8 @@ import AdminLogin from './Components/Admin/AdminLogin';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import OfficerDashboard from './Components/Admin/OfficerDashboard';
 import EligibleSchemes from './Components/EligibleSchemes/EligibleSchemes';
+import OfficerSidebar from './Components/Admin/OfficerSidebar';
+import OfficerLayout from './Components/Admin/OfficerLayout';
 
 const theme = createTheme({
   palette:{
@@ -53,7 +55,7 @@ function App() {
             <Route path='/post-matric-vjnt-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to VJNT students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>                                                       }/>
             <Route path='/officer-login' element={<AdminLogin title="Officer"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
-            <Route path='/officer-dashboard' element={<OfficerDashboard/>}/>
+            <Route path='/officer-dashboard' element={<OfficerLayout><OfficerDashboard/></OfficerLayout>}/>
             <Route path='*' element={<Error/>}/>
         </Routes>
       </BrowserRouter>
