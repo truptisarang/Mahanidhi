@@ -10,6 +10,7 @@ const cancel_application_router = require("./router/application_router/cancel_ap
 const officer_login_router = require("./router/officer_router/officer_login_router")
 const get_officer_details_router = require("./router/data_router/get_officer_details_router");
 const get_application_router = require("./router/application_router/get_application_router");
+const update_status_router = require("./router/application_router/update_status_router")
 
 const app = express();
 const cors = require("cors");
@@ -37,7 +38,7 @@ app.use("/officerLogin", officer_login_router);
 app.use("/getofficerDetails", get_officer_details_router);
 app.use("/addOfficer", add_officer_router);
 app.use("/deleteOfficer", delete_officer_router);
-
+app.use("/updateStatus", update_status_router);
 
 
 const startServer = async () => {
