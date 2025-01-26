@@ -180,13 +180,14 @@ const MyApplications = () => {
         : 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
+            <TableHead >
               <TableRow>
                 <TableCell align="center">ApplicationID</TableCell>
                 <TableCell align="center">Department Name</TableCell>
                 <TableCell align="center">Scheme Name</TableCell>
                 <TableCell align="center">Date</TableCell>
                 <TableCell align="center">Status</TableCell>
+                <TableCell align="center">Rejection Reason</TableCell>
                 <TableCell align="center">Action</TableCell>
                 <TableCell align="center">View</TableCell>
               </TableRow>
@@ -199,6 +200,7 @@ const MyApplications = () => {
                   <TableCell>{app?.Data?.schemeName}</TableCell>
                   <TableCell>{app?.Date}</TableCell>
                   <TableCell>{app?.status}</TableCell>
+                  <TableCell>{app?.remarks}</TableCell>
                   <TableCell align="right">
                     <Button
                       size="small"

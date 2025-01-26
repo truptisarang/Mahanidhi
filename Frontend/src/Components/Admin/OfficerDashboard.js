@@ -45,7 +45,7 @@ const OfficerDashboard = () => {
   const [OpenApproveModal, setOpenApproveModal] = useState(false);
   const [OpenRejectModal, setOpenRejectModal] = useState(false);
   const [EnteredAppID, setEnteredAppID] = useState("");
-  const [Reason, setReason] = useState()
+  const [Reason, setReason] = useState();
 
   const handleOpenViewModal = (appData) => {
     setopenViewModal(true);
@@ -62,16 +62,18 @@ const OfficerDashboard = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/getApplications",
-        { mode: "officer", DeptName: deptName }
+        { mode: "officer", DeptName: deptName, scrutinised:false, status:"Pending"}
       );
-      setApplications(response.data.data);
+      if(response.data.data){
+        setApplications(response.data.data);
+      }
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     getApplications();
-  }, []);
+  }, [Applications]);
 
   const updateStatus = async (data) => {
     try {
@@ -79,11 +81,16 @@ const OfficerDashboard = () => {
         Data: data,
       });
       if (response.data.success === true) {
-        toast.success("Form Accepted!!");
+        toast.success("Status updated!!");
+
         setOpenApproveModal(false);
+        setOpenRejectModal(false);
+        setReason(null);
       }
     } catch (error) {
-      toast.error("Error while approving the application. Please try again");
+      toast.error(
+        "Error while updating the status of the application. Please try again"
+      );
     }
   };
 
@@ -104,7 +111,7 @@ const OfficerDashboard = () => {
         pauseOnHover
         theme="colored"
       />
-      <h2>Officer Dashboard</h2>
+      <h3>Pending Applications</h3>
       <Modal
         open={OpenApproveModal}
         onClose={(e) => setOpenApproveModal(false)}
@@ -190,7 +197,7 @@ const OfficerDashboard = () => {
               label="Reason for rejection"
               onChange={(e) => setReason(e.target.value)}
               value={Reason}
-              error={Reason == "" }
+              error={Reason == ""}
               helperText={Reason == "" && "Enter Reason for rejection"}
             >
               Enter Application ID
@@ -199,7 +206,11 @@ const OfficerDashboard = () => {
               variant="contained"
               color="warning"
               onClick={(e) =>
-                handleAcceptApp({ appid: SelectedApplication?.applicationId, status: "Reject" })
+                handleAcceptApp({
+                  appid: SelectedApplication?.applicationId,
+                  remarks: Reason,
+                  status: "Reject",
+                })
               }
               disabled={Reason == ""}
             >
@@ -308,7 +319,7 @@ const OfficerDashboard = () => {
         </Box>
       </Modal>
       <Box sx={{ width: 1000 }}>
-        <TableContainer component={Paper}>
+        {Applications.length > 0  ? (<TableContainer component={Paper}>
           <Table>
             <TableHead style={{ backgroundColor: "#F9EE99" }}>
               <TableRow>
@@ -370,7 +381,10 @@ const OfficerDashboard = () => {
                         </IconButton>
                         <IconButton
                           color="warning"
-                          onClick={(e) => setOpenRejectModal(true)}
+                          onClick={(e) => {
+                            setOpenRejectModal(true);
+                            setSelectedApplication(app);
+                          }}
                         >
                           <CloseIcon />
                         </IconButton>
@@ -381,7 +395,7 @@ const OfficerDashboard = () => {
               })}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer>) : <center>No pending applications !!!</center>}
       </Box>
     </div>
   );

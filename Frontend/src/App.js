@@ -20,6 +20,7 @@ import OfficerDashboard from './Components/Admin/OfficerDashboard';
 import EligibleSchemes from './Components/EligibleSchemes/EligibleSchemes';
 import OfficerSidebar from './Components/Admin/OfficerSidebar';
 import OfficerLayout from './Components/Admin/OfficerLayout';
+import ScrutinisedApp from './Components/Admin/ScrutinisedApp';
 
 const theme = createTheme({
   palette:{
@@ -56,6 +57,7 @@ function App() {
             <Route path='/officer-login' element={<AdminLogin title="Officer"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
             <Route path='/officer-dashboard' element={<OfficerLayout><OfficerDashboard/></OfficerLayout>}/>
+            <Route path='/scrutinised-applications' element={<OfficerLayout><ScrutinisedApp/></OfficerLayout>}/>
             <Route path='*' element={<Error/>}/>
         </Routes>
       </BrowserRouter>
