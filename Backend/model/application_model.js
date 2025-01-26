@@ -5,6 +5,7 @@ const applicationSchema = new mongoose.Schema({
   AadhaarNumber: String,
   Date:Date,    
   Data:Object,  
+  remarks:String,
   status: { type: String, default: "Pending" }, // Current application status
 });
 
