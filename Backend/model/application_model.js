@@ -6,6 +6,10 @@ const applicationSchema = new mongoose.Schema({
   Date:Date,    
   Data:Object,  
   remarks:String,
+  amountinINR:String,
+  txHash:String,
+  beneficiaryWallet:String,
+  disbursedAmount:String,
   status: { type: String, default: "Pending" }, // Current application status
 });
 

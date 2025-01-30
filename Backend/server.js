@@ -1,4 +1,5 @@
 const express = require("express");
+require('dotenv').config();
 const { connectMahanidhiDB } = require("./utils/dbConn");
 const verify_aadhaar_router = require("./router/registration_router/verify_aadhaar_router");
 const login_router = require("./router/login_router/login_router")
