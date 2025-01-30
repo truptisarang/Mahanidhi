@@ -73,7 +73,7 @@ const OfficerDashboard = () => {
   };
   useEffect(() => {
     getApplications();
-  }, [Applications]);
+  }, []);
 
   const updateStatus = async (data) => {
     try {

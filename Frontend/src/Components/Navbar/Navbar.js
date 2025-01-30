@@ -4,8 +4,12 @@ import Button from '@mui/material/Button';
 import "../Navbar/Navbar.css"
 import { useLocation, useNavigate } from 'react-router-dom'
 import CreateIcon from '@mui/icons-material/Create';
+import { useSelector } from "react-redux";
 
 const Navbar = () =>{
+  const username = useSelector((state)=>state.Profile.username)
+  const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
+
     const location = useLocation();
     const currentRoute = location.pathname;
     const navigate = useNavigate();

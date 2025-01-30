@@ -17,6 +17,7 @@ const Sidebar = () =>{
         {icons:<ChecklistOutlinedIcon/>, to:"/eligible-schemes", text:"Eligible Schemes", restricted:false},
         {icons:<PersonIcon/>, to:"/profile", text:"Profile", restricted:false},
     ]
+    
     return (
         <>
         <nav id="navigation">

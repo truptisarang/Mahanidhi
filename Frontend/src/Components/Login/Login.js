@@ -11,6 +11,7 @@ import {useDispatch} from 'react-redux'
 import {setProfileCompletionStatus} from "../../redux/slices/profile_completion_slice";
 import {setOfficer} from "../../redux/slices/officer_slice";
 import { useSelector } from "react-redux";
+axios.defaults.withCredentials = true;
 
 const Login = (props) =>{
     const [showPassword, setshowPassword] = useState(false)
@@ -107,19 +108,22 @@ const Login = (props) =>{
 
     
 
-    const handleNavigation = () =>{
-      if(role === "Officer"){
-        navigate('/officer-dashboard')
-      }else if(role === "Admin"){
-        navigate('/admin-dashboard')
-      }else{
-        if(!isProfileCompleted){
-          navigate("/profile")
-        }else{
-          navigate("/dashboard")
+  const handleNavigation = () => {
+    switch (role) {
+      case "Officer":
+        navigate("/officer-dashboard");
+        break;
+      case "Admin":
+        navigate("/admin-dashboard");
+        break;
+      default:
+        if (!isProfileCompleted) {
+          navigate("/profile");
+        } else {
+          navigate("/dashboard");
         }
-      }
     }
+  };
 
     return (
         <>
