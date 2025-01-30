@@ -3,8 +3,10 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import FeedIcon from '@mui/icons-material/Feed';
 import PersonIcon from '@mui/icons-material/Person';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import "../Dashboard/Sidebar.css"
 import { useSelector } from "react-redux";
+import Notifications from "./Notifications/Notifications";
 
 const Sidebar = () =>{
 
@@ -15,6 +17,7 @@ const Sidebar = () =>{
         {icons:<DashboardIcon/>, to:"/dashboard", text:"Dashboard", restricted:true},
         {icons:<FeedIcon/>, to:"/myapplications", text:"My applications", restricted:true},
         {icons:<ChecklistOutlinedIcon/>, to:"/eligible-schemes", text:"Eligible Schemes", restricted:false},
+        {icons:<NotificationsIcon/>, to:"/notifications", text:"Notifications", restricted:false},
         {icons:<PersonIcon/>, to:"/profile", text:"Profile", restricted:false},
     ]
     

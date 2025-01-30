@@ -17,7 +17,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.7",
-    "ethers": "^6.13.2",
+    "ethers": "^6.13.5",
     "jsonwebtoken": "^9.0.2",
     "lottie-react": "^2.4.0",
     "mui-one-time-password-input": "^2.0.3",
@@ -30,6 +30,7 @@
     "react-toastify": "^10.0.6",
     "redux-persist": "^6.0.0",
     "redux-persist-transform-encrypt": "^5.1.1",
+    "socket.io-client": "^4.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

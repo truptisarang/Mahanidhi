@@ -21,6 +21,7 @@ import EligibleSchemes from './Components/EligibleSchemes/EligibleSchemes';
 import OfficerSidebar from './Components/Admin/OfficerSidebar';
 import OfficerLayout from './Components/Admin/OfficerLayout';
 import ScrutinisedApp from './Components/Admin/ScrutinisedApp';
+import Notifications from './Components/Dashboard/Notifications/Notifications';
 
 const theme = createTheme({
   palette:{
@@ -47,6 +48,7 @@ function App() {
             <Route path='/dashboard' element={<Layout><Dashboard/></Layout>}/>
             <Route path='/profile' element={<Layout><Profile/></Layout>}/>
             <Route path='/myapplications' element={<Layout><MyApplications/></Layout>}/>
+            <Route path='/notifications' element={<Layout><Notifications/></Layout>}/>
             <Route path='/eligible-schemes' element={<Layout><EligibleSchemes/></Layout>}/>
             <Route path='/eligible-schemes/post-matric-sbc-eligibility-criteria' element={<Layout><Post_mat_SBC/></Layout>}/>
             <Route path='/eligible-schemes/post-matric-vjnt-eligibility-criteria' element={<Layout><Post_mat_VJNT/></Layout>}/>

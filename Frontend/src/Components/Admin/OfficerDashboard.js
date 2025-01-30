@@ -46,10 +46,20 @@ const OfficerDashboard = () => {
   const [OpenRejectModal, setOpenRejectModal] = useState(false);
   const [EnteredAppID, setEnteredAppID] = useState("");
   const [Reason, setReason] = useState();
+  const [Amount, setAmount] = useState("");
+  const [touched, setTouched] = useState(false);
 
   const handleOpenViewModal = (appData) => {
     setopenViewModal(true);
     setSelectedApplication(appData);
+  };
+
+  const handleAmountChange = (e) => {
+    // Ensure the input is a number or empty string
+    const value = e.target.value;
+    if (value === "" || /^[0-9]+(\.[0-9]*)?$/.test(value)) {
+      setAmount(value);
+    }
   };
 
   const handleCloseViewModal = () => {
@@ -62,9 +72,14 @@ const OfficerDashboard = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/getApplications",
-        { mode: "officer", DeptName: deptName, scrutinised:false, status:"Pending"}
+        {
+          mode: "officer",
+          DeptName: deptName,
+          scrutinised: false,
+          status: "Pending",
+        }
       );
-      if(response.data.data){
+      if (response.data.data) {
         setApplications(response.data.data);
       }
     } catch (error) {
@@ -98,6 +113,10 @@ const OfficerDashboard = () => {
     updateStatus(data);
   };
 
+  const handleBlur = () => {
+    setTouched(true); // Mark field as touched when the user moves out of the input
+  };
+
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   return (
@@ -114,7 +133,12 @@ const OfficerDashboard = () => {
       <h3>Pending Applications</h3>
       <Modal
         open={OpenApproveModal}
-        onClose={(e) => setOpenApproveModal(false)}
+        onClose={(e) => {
+          setOpenApproveModal(false);
+          setAmount("");
+          setEnteredAppID("")
+          setTouched(false)
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -154,13 +178,25 @@ const OfficerDashboard = () => {
             >
               Enter Application ID
             </TextField>
+            <TextField
+              value={Amount}
+              label={"Amount (In INR )"}
+              onChange={handleAmountChange}
+              fullWidth
+              onBlur={handleBlur} // Track blur event to set the field as touched
+              error={touched && Amount === ""} // Error only if touched and empty
+              helperText={
+                touched && Amount === "" ? "Please enter the amount" : ""
+              }
+              type={"text"}
+            ></TextField>
             <Button
               variant="contained"
               color="success"
               onClick={(e) =>
-                handleAcceptApp({ appid: EnteredAppID, status: "Approved" })
+                handleAcceptApp({ appid: EnteredAppID, amount: Amount, status: "Approved" })
               }
-              disabled={EnteredAppID !== SelectedApplication?.applicationId}
+              disabled={EnteredAppID !== SelectedApplication?.applicationId || Amount === ""}
             >
               Approve
             </Button>
@@ -319,83 +355,91 @@ const OfficerDashboard = () => {
         </Box>
       </Modal>
       <Box sx={{ width: 1000 }}>
-        {Applications.length > 0  ? (<TableContainer component={Paper}>
-          <Table>
-            <TableHead style={{ backgroundColor: "#F9EE99" }}>
-              <TableRow>
-                <TableCell>
-                  <b>Sr No.</b>
-                </TableCell>
-                <TableCell>
-                  <b>Application ID</b>
-                </TableCell>
-                <TableCell>
-                  <b>Applicant Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Department</b>
-                </TableCell>
-                <TableCell>
-                  <b>Scheme Name</b>
-                </TableCell>
-                <TableCell>
-                  <b>Submission Date</b>
-                </TableCell>
-                <TableCell>
-                  <b>Status</b>
-                </TableCell>
-                <TableCell>
-                  <b>Actions</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {Applications.map((app, index) => {
-                return (
-                  <TableRow>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{app.applicationId}</TableCell>
-                    <TableCell>{app.applicantName}</TableCell>
-                    <TableCell>{app.Data.deptName}</TableCell>
-                    <TableCell>{app.Data.schemeName}</TableCell>
-                    <TableCell>{app.Date}</TableCell>
-                    <TableCell>{app.status}</TableCell>
-                    <TableCell>
-                      <Box display={"flex"} alignItems={"center"} gap={"1rem"}>
-                        <IconButton
-                          color="black"
-                          onClick={() => {
-                            handleOpenViewModal(app);
-                          }}
+        {Applications.length > 0 ? (
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead style={{ backgroundColor: "#F9EE99" }}>
+                <TableRow>
+                  <TableCell>
+                    <b>Sr No.</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Application ID</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Applicant Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Department</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Scheme Name</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Submission Date</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Status</b>
+                  </TableCell>
+                  <TableCell>
+                    <b>Actions</b>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Applications.map((app, index) => {
+                  return (
+                    <TableRow>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{app.applicationId}</TableCell>
+                      <TableCell>{app.applicantName}</TableCell>
+                      <TableCell>{app.Data.deptName}</TableCell>
+                      <TableCell>{app.Data.schemeName}</TableCell>
+                      <TableCell>{app.Date}</TableCell>
+                      <TableCell>{app.status}</TableCell>
+                      <TableCell>
+                        <Box
+                          display={"flex"}
+                          alignItems={"center"}
+                          gap={"1rem"}
                         >
-                          <VisibilityIcon />
-                        </IconButton>
-                        <IconButton
-                          color="success"
-                          onClick={(e) => {
-                            setOpenApproveModal(true);
-                            setSelectedApplication(app);
-                          }}
-                        >
-                          <DoneAllIcon />
-                        </IconButton>
-                        <IconButton
-                          color="warning"
-                          onClick={(e) => {
-                            setOpenRejectModal(true);
-                            setSelectedApplication(app);
-                          }}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </TableContainer>) : <center>No pending applications !!!</center>}
+                          <IconButton
+                            color="black"
+                            onClick={() => {
+                              handleOpenViewModal(app);
+                            }}
+                          >
+                            <VisibilityIcon />
+                          </IconButton>
+                          <IconButton
+                            color="success"
+                            onClick={(e) => {
+                              setOpenApproveModal(true);
+                              setSelectedApplication(app);
+                            }}
+                          >
+                            <DoneAllIcon />
+                          </IconButton>
+                          <IconButton
+                            color="warning"
+                            onClick={(e) => {
+                              setOpenRejectModal(true);
+                              setSelectedApplication(app);
+                            }}
+                          >
+                            <CloseIcon />
+                          </IconButton>
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <center>No pending applications !!!</center>
+        )}
       </Box>
     </div>
   );
