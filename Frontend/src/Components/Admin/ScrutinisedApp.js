@@ -39,7 +39,7 @@ const ScrutinisedApp = () => {
   const getApplications = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getApplications",
+        "https://mahanidhibackend.onrender.com/getApplications",
         { mode: "officer", DeptName: deptName, scrutinised:true, status: "Pending" }
       );
       if (response.data.data) {
