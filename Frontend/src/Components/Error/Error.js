@@ -1,6 +1,5 @@
 import React from "react";
 import '../Error/Error.css'
-import { Button } from "@mui/material";
 
 const Error = () =>{
     return(
