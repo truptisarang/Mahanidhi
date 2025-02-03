@@ -12,6 +12,7 @@ const userSchema = mongoose.Schema({
           BeneficiaryCat: String,
           PersonalInfo:{},
           CourseDetails:[],
+          Email:String,
           isProfileCompleted:{type:Boolean, default:false}
         })
 const userModel = new mongoose.model("users", userSchema)

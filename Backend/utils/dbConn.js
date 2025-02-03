@@ -4,6 +4,7 @@ const MahanidhiURI =
 const MockAadhaarURI =
   "mongodb+srv://truptis3504:ZHUTiIpzNnLqYk7J@cluster0.dmuwoxr.mongodb.net/MockAadhaarDB?retryWrites=true&w=majority&appName=Cluster0";
 exports.MockAadhaarURI = MockAadhaarURI;
+let aadhaar_model;
 
 const connectMahanidhiDB = async () => {
   try {
@@ -19,9 +20,8 @@ const connectMahanidhiDB = async () => {
 const connectMockAadhaarDB = async () => {
   try {
     const MockAadhaarDBconn = await mongoose.createConnection(MockAadhaarURI);
-
     console.log("Connected to MockAadhaar DB successfully");
-    return MockAadhaarDBconn.model(
+    aadhaar_model =  MockAadhaarDBconn.model(
       "Aadhaar Details",
       mongoose.Schema({
         AadhaarNumber: String,
@@ -30,6 +30,7 @@ const connectMockAadhaarDB = async () => {
         Gender: String,
         Address: Object,
         PhoneNumber: String,
+        Email:String
       })
     );
   } catch (error) {
@@ -37,4 +38,11 @@ const connectMockAadhaarDB = async () => {
   }
 };
 
-module.exports = { connectMahanidhiDB, connectMockAadhaarDB};
+const getAadhaarModel = () => {
+  if (!aadhaar_model) {
+    throw new Error("Aadhaar model is not initialized. Ensure the database connection is established first.");
+  }
+  return aadhaar_model;
+};
+
+module.exports = { connectMahanidhiDB, connectMockAadhaarDB, getAadhaarModel};
