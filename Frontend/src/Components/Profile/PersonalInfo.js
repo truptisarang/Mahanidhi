@@ -149,7 +149,7 @@ const PersonalInfo = (props) => {
   const getDetails = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getPersonalDetails",
+        "https://mahanidhibackend.onrender.com/getPersonalDetails",
         { Aadhaar: aadhaar }
       );
       if (response.data.data) {
