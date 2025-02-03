@@ -92,7 +92,7 @@ const AdminDashboard = () => {
 
   const handleDelete = async (officerid) => {
     try {
-      const response = await axios.post("http://localhost:5000/deleteOfficer", {
+      const response = await axios.post("https://mahanidhibackend.onrender.com/deleteOfficer", {
         officer_id: DeleteAppID,
       });
 
@@ -154,7 +154,7 @@ const AdminDashboard = () => {
   const fetchOfficerDetails = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getOfficerDetails"
+        "https://mahanidhibackend.onrender.com/getOfficerDetails"
       );
       if (response) {
         setDetails(response.data.data);
@@ -190,7 +190,7 @@ const AdminDashboard = () => {
         }));
         if (officerData && officerData.officerid !== "") {
           const response = await axios.post(
-            "http://localhost:5000/addOfficer",
+            "https://mahanidhibackend.onrender.com/addOfficer",
             { OfficerData: officerData }
           );
           if (response.data.msg === "success") {

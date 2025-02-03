@@ -27,7 +27,7 @@ const Hostel = (props) => {
   const SaveDetails = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/updateProfile/${aadhaarId}`,
+        `https://mahanidhibackend.onrender.com/updateProfile/${aadhaarId}`,
         { pi, cd, BCategory }
       );
       console.log(response.data);

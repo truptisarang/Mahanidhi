@@ -9,7 +9,7 @@ export const AddressInfo = (props) => {
   const aadhaar_number = useSelector((state)=>state.Profile.aadhaar)
   const [Address, setAddress] = useState({Address:"", State:"", District:"", Taluka:"", Village:"", Pincode:""})
   const getAdressDetails = async() =>{
-    const response = await axios.post("http://localhost:5000/getPersonalDetails", {Aadhaar:aadhaar_number})
+    const response = await axios.post("https://mahanidhibackend.onrender.com/getPersonalDetails", {Aadhaar:aadhaar_number})
     setAddress(response.data.data.Address)
   }
   useEffect(()=>{

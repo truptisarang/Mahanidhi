@@ -63,7 +63,7 @@ const Login = (props) => {
   const handleOfficerLogin = async (e) => {
     try {
       setLoading(true)
-      const response = await axios.post("http://localhost:5000/officerLogin", {
+      const response = await axios.post("https://mahanidhibackend.onrender.com/officerLogin", {
         Username,
         Password,
       });
@@ -95,7 +95,7 @@ const Login = (props) => {
   const handleLogin = async (e) => {
     try {
       setLoading(true);
-      const response = await axios.post("http://localhost:5000/login", {
+      const response = await axios.post("https://mahanidhibackend.onrender.com/login", {
         Username,
         Password,
       });
@@ -144,7 +144,7 @@ const Login = (props) => {
     // }
     if (OTP) {
       setLoadingVerifyOTP(true);
-      const response = await axios.post("http://localhost:5000/verifyOTP", {
+      const response = await axios.post("https://mahanidhibackend.onrender.com/verifyOTP", {
         email: Email,
         enteredOtp: OTP,
         userId: Userid,

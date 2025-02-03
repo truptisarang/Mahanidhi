@@ -56,7 +56,7 @@ const Navbar = () => {
   };
   
   const Logout = async() =>{
-    const response = await axios.post("http://localhost:5000/logout")
+    const response = await axios.post("https://mahanidhibackend.onrender.com/logout")
     if(officerRole){
       dispatch(Officerlogout())
     }else{

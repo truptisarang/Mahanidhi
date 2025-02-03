@@ -71,7 +71,7 @@ const OfficerDashboard = () => {
   const getApplications = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getApplications",
+        "https://mahanidhibackend.onrender.com/getApplications",
         {
           mode: "officer",
           DeptName: deptName,
@@ -92,7 +92,7 @@ const OfficerDashboard = () => {
 
   const updateStatus = async (data) => {
     try {
-      const response = await axios.patch("http://localhost:5000/updateStatus", {
+      const response = await axios.patch("https://mahanidhibackend.onrender.com/updateStatus", {
         Data: data,
       });
       if (response.data.success === true) {
