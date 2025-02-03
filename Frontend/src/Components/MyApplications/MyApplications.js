@@ -46,7 +46,7 @@ const MyApplications = () => {
   const getApplicationsDetails = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getApplications",
+        "https://mahanidhibackend.onrender.com/getApplications",
         { Aadhaar: aadhaar,mode:"user" }
       );
       if(response.data.data !== null){
@@ -62,7 +62,7 @@ const MyApplications = () => {
   const getPersonalDetails = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/getPersonalDetails",
+        "https://mahanidhibackend.onrender.com/getPersonalDetails",
         { Aadhaar: aadhaar }
       );
       setAllDetails(response.data.data);
@@ -90,7 +90,7 @@ const MyApplications = () => {
   const handleDelete = async (app) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/cancelApplication",
+        "https://mahanidhibackend.onrender.com/cancelApplication",
         {
           AppID: app.AppID,
         }
