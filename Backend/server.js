@@ -36,7 +36,7 @@ const limiter = rate_limit({
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://mahanidhifrontend.onrender.com/",
     credentials: true,
   })
 );
