@@ -41,9 +41,9 @@ app.use(
   })
 );
 
-// app.use("/login", Loginlimiter)
-// app.use("/", limiter)
-// app.use("/verifyAadhaar", Loginlimiter)
+app.use("/login", Loginlimiter)
+app.use("/", limiter)
+app.use("/verifyAadhaar", Loginlimiter)
 
 app.use("/verifyAadhaar", verify_aadhaar_router);
 app.use("/verifyAadhaarOTP", verify_aadhaar_otp_router);
