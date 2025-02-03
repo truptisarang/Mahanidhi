@@ -31,7 +31,7 @@ const WalletCreation = (props) =>{
             link.download = "wallet-info.txt";
             link.click();
             sessionStorage.setItem("WalletAddr", Wallet)
-            const response = axios.post("http://localhost:5000/storePersonalDetails",{creds:Creds, pd:personal_details})
+            const response = axios.post("https://mahanidhibackend.onrender.com/storePersonalDetails",{creds:Creds, pd:personal_details})
             goToNext();
         }
     }
