@@ -62,7 +62,7 @@ const SchemeForm = (props) => {
       if (validateForm()) {
         return;
       }
-      const response = await axios.post("http://localhost:5000/submitForm", {
+      const response = await axios.post("https://mahanidhibackend.onrender.com/submitForm", {
         form_data: FormData,
         Aadhaar: aadhaar,
         date:new Date().toLocaleDateString()
