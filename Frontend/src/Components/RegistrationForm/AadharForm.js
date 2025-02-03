@@ -73,7 +73,7 @@ const AadharForm = () => {
   const verifyAadhaar = async () => {
     try {
     setLoading(true)
-    const response = await axios.post("http://localhost:5000/verifyAadhaar", {aadhaar_number: Aadhar});
+    const response = await axios.post("https://mahanidhibackend.onrender.com/verifyAadhaar", {aadhaar_number: Aadhar});
     console.log(response)
       if(response.data.data) {
         setuserData(response.data?.data);
@@ -94,7 +94,7 @@ const AadharForm = () => {
 
   const verifyOTP = async () => {
     const response = await axios.post(
-      "http://localhost:5000/verifyAadhaarOTP",
+      "https://mahanidhibackend.onrender.com/verifyAadhaarOTP",
       { userData, OTP }
     );
     console.log(response)
