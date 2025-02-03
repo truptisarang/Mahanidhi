@@ -20,7 +20,7 @@ const delete_officer_router = require("./router/officer_router/delete_officer_ro
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://mahanidhifrontend.onrender.com",
     credentials: true,
   })
 );
