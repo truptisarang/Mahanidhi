@@ -38,7 +38,6 @@ const PersonalInfo = (props) => {
   const [PersonalInfo, setPersonalInfo] = useState({
     AppFullName: "",
     ParentsMobileNo: "",
-    EmailID: "",
     MaritalStatus: "",
     Religion: "",
     Caste: "",
@@ -74,6 +73,7 @@ const PersonalInfo = (props) => {
     PhoneNumber: "",
     Age: "",
     Gender: "",
+    Email: ""
   });
   const [HaveCC, setHaveCC] = useState("No");
   const [HaveIC, setHaveIC] = useState("No");
@@ -225,15 +225,15 @@ const PersonalInfo = (props) => {
                   variant="outlined"
                   label="Name"
                   disabled
-                  value={Details.FullName}
+                  value={Details.FullName || ""}
                   fullWidth
                 ></TextField>
                 <TextField
                   variant="outlined"
-                  label="Age"
+                  label="DOB"
                   disabled
                   fullWidth
-                  value={Details.DOB}
+                  value={Details.DOB || ""}
                 ></TextField>
                 <TextField
                   variant="outlined"
@@ -295,23 +295,10 @@ const PersonalInfo = (props) => {
                   variant="outlined"
                   label="Email ID"
                   fullWidth
-                  value={PersonalInfo?.EmailID}
+                  value={Details?.Email}
                   error={Errors && Errors.EmailID}
-                  helperText={Errors.EmailID}
-                  onChange={(e) => {
-                    setPersonalInfo({
-                      ...PersonalInfo,
-                      EmailID: e.target.value,
-                    });
-                    if (e.target.value === "") {
-                      setErrors({
-                        ...Errors,
-                        EmailID: "Please provide email-id",
-                      });
-                    } else {
-                      setErrors({ ...Errors, EmailID: "" });
-                    }
-                  }}
+                  helperText={Errors.EmailID || ""}
+                  disabled={true}
                 ></TextField>
                 <TextField
                   variant="outlined"
@@ -658,7 +645,7 @@ const PersonalInfo = (props) => {
                   variant="outlined"
                   label="Family Annual Income"
                   required
-                  value = {PersonalInfo.IncomeDetails}
+                  value = {PersonalInfo?.IncomeDetails}
                   error={Errors && Errors.FI}
                   helperText={Errors.FI}
                   onChange={(e) => {
@@ -774,7 +761,7 @@ const PersonalInfo = (props) => {
                       variant="outlined"
                       label="Issuing Date"
                       required
-                      value={PersonalInfo.IncomeCert.IDate}
+                      value={PersonalInfo?.IncomeCert?.IDate}
                       error={Errors && Errors.IIDate}
                       helperText={Errors.IIDate}
                       onChange={(e) => {

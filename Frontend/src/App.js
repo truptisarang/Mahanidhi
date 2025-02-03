@@ -45,21 +45,28 @@ function App() {
             <Route path='/' element={<Home/>}/>
             <Route path='/registration' element={<RegistrationForm />}/>
             <Route path='/login' element={<Login props=""/>}/>
-            <Route path='/dashboard' element={<Layout><Dashboard/></Layout>}/>
-            <Route path='/profile' element={<Layout><Profile/></Layout>}/>
-            <Route path='/myapplications' element={<Layout><MyApplications/></Layout>}/>
-            <Route path='/notifications' element={<Layout><Notifications/></Layout>}/>
-            <Route path='/eligible-schemes' element={<Layout><EligibleSchemes/></Layout>}/>
-            <Route path='/eligible-schemes/post-matric-sbc-eligibility-criteria' element={<Layout><Post_mat_SBC/></Layout>}/>
-            <Route path='/eligible-schemes/post-matric-vjnt-eligibility-criteria' element={<Layout><Post_mat_VJNT/></Layout>}/>
-            <Route path='/eligible-schemes/post-matric-obc-eligibility-criteria' element={<Layout><Post_mat_OBC/></Layout>}/>
-            <Route path='/post-matric-sbc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to SBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
-            <Route path='/post-matric-obc-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to OBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>}/>
-            <Route path='/post-matric-vjnt-form' element={<Layout><SchemeForm schemeName="Post Matric Scholarship to VJNT students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/></Layout>                                                       }/>
+            <Route path='/eligible-schemes/post-matric-sbc-eligibility-criteria' element={<Post_mat_SBC/>}/>
+            <Route path='/eligible-schemes/post-matric-vjnt-eligibility-criteria' element={<Post_mat_VJNT/>}/>
+            <Route path='/eligible-schemes/post-matric-obc-eligibility-criteria' element={<Post_mat_OBC/>}/>
+            
+            <Route element={<Layout/>}>
+            <Route path='/dashboard' element={<Dashboard/>}/>
+            <Route path='/profile' element={<Profile/>}/>
+            <Route path='/myapplications' element={<MyApplications/>}/>
+            <Route path='/notifications' element={<Notifications/>}/>
+            <Route path='/eligible-schemes' element={<EligibleSchemes/>}/>
+            <Route path='/post-matric-sbc-form' element={<SchemeForm schemeName="Post Matric Scholarship to SBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/>}/>
+            <Route path='/post-matric-obc-form' element={<SchemeForm schemeName="Post Matric Scholarship to OBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/>}/>
+            <Route path='/post-matric-vjnt-form' element={<SchemeForm schemeName="Post Matric Scholarship to VJNT students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/>}/>
+            </Route>
+
             <Route path='/officer-login' element={<AdminLogin title="Officer"/>}/>
             <Route path='/admin-dashboard' element={<AdminDashboard/>}/>
-            <Route path='/officer-dashboard' element={<OfficerLayout><OfficerDashboard/></OfficerLayout>}/>
-            <Route path='/scrutinised-applications' element={<OfficerLayout><ScrutinisedApp/></OfficerLayout>}/>
+            
+            <Route element={<OfficerLayout/>}>
+            <Route path='/officer-dashboard' element={<OfficerDashboard/>}/>
+            <Route path='/scrutinised-applications' element={<ScrutinisedApp/>}/>
+            </Route>
             <Route path='*' element={<Error/>}/>
         </Routes>
       </BrowserRouter>

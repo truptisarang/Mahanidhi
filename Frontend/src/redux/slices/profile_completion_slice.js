@@ -4,19 +4,29 @@ export const profileCompletedSlice = createSlice({
     name:"Profile",
     initialState:{
         isProfileCompleted:false,
-        username:""
+        username:null,
+        aadhaar:null,
+        isLoggedIn:false
     },
     reducers:{
-        setProfileCompletionStatus:(state, action)=>{
-            if(action.payload.isProfileCompleted !== undefined){
-                state.isProfileCompleted = action.payload.isProfileCompleted;
-            }if(action.payload.username !== undefined){
-                state.username = action.payload.username;
-            }
+        loginSuccess: (state, action)=>{
+            state.isProfileCompleted = action.payload.isProfileCompleted;
+            state.username = action.payload.username;
+            state.aadhaar = action.payload.aadhaar;
+            state.isLoggedIn = action.payload.isLoggedIn;
+        },
+        updateProfileStatus: (state, action) => {
+            state.isProfileCompleted = action.payload.isProfileCompleted;
+        },
+        logout:(state) =>{
+            state.isProfileCompleted = null;
+            state.username = null;
+            state.aadhaar = null;
+            state.isLoggedIn = false
         }
     }
 })
 
-export const { setProfileCompletionStatus } = profileCompletedSlice.actions;
+export const { loginSuccess, logout, updateProfileStatus } = profileCompletedSlice.actions;
 
 export default profileCompletedSlice.reducer;

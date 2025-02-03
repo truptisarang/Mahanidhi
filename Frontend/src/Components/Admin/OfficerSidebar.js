@@ -6,7 +6,7 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 const OfficerSidebar = () =>{
 
-    const username = useSelector((state)=>state.Profile.username)
+    const username = useSelector((state)=>state.Officer.fullName)
     // const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
 
     const links = [

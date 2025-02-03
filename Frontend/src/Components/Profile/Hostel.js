@@ -9,13 +9,12 @@ import { toast, ToastContainer } from "react-toastify";
 import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setProfileCompletionStatus } from "../../redux/slices/profile_completion_slice";
+import { updateProfileStatus } from "../../redux/slices/profile_completion_slice";
 
 const Hostel = (props) => {
   const goback = props.backHandler;
   const [BCategory, setBCategory] = useState("");
   const aadhaarId = useSelector((State) => State.Profile.aadhaar);
-  alert(aadhaarId)
   const getData = (key) => {
     const data = sessionStorage.getItem(key);
     return data ? JSON.parse(data) : null;
@@ -33,7 +32,7 @@ const Hostel = (props) => {
       );
       console.log(response.data);
       if (response.data.msg === "update_profile_done") {
-        dispatch(setProfileCompletionStatus({ isProfileCompleted: true }));
+        dispatch(updateProfileStatus({ isProfileCompleted: true }));
         toast.success("Profile update successfully");
       }
     } catch (error) {

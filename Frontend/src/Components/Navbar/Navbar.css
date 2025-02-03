@@ -1,16 +1,19 @@
 
 
 
-navbar{
+nav{
     grid-area:navbar;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-    background-color: var(--mainColor);
+    /* background-color: var(--mainColor); */
     display: flex;
     align-items: center;
     justify-content:space-between;
     margin-bottom: 1rem;
 }
 #Btnlogin{
+    display: flex;
+    justify-content: space-around;
+    gap:2rem;
     margin-right: 1rem;
 }
 

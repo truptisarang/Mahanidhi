@@ -23,15 +23,15 @@ const PersonalDetails = (props) =>{
     const [Creds, setCreds] = useState({username: "", password:""})
     const goToNext = props.next;
     const {activeStep, setActiveStep} = props.activeStep;
-    const isFormValid = !(isUsernameValid && isPasswordValid);
+    const isFormValid = !(isUsernameValid || isPasswordValid);
     sessionStorage.setItem("PersonalDetails", JSON.stringify(props.details))
     
     useEffect(()=>{
       const username = sessionStorage.getItem("Username")
       const password = sessionStorage.getItem("Password")
       setCreds({username:username,password:password})
-      setisPasswordValid(true)
-      setisUsernameValid(true)
+      setisPasswordValid(false)
+      setisUsernameValid(false)
     },[])
 
     const handlePopoverOpen = (e) =>{
@@ -62,7 +62,7 @@ const PersonalDetails = (props) =>{
     }
 
     const phandleKeyDown=(e)=>{
-      const special_char_regex = /[A-Za-z0-9$#@_]/
+      const special_char_regex = /[A-Za-z0-9$#@_.]/
       if(!special_char_regex.test(e.key)){
         e.preventDefault();
       }
@@ -96,7 +96,7 @@ const PersonalDetails = (props) =>{
       const uppercase_regex = /[A-Z]/;
       const lowercase_regex = /[a-z]/;
       const number_regex = /[0-9]/;
-      const special_char_regex = /[$@#_]/;
+      const special_char_regex = /[$@#_.]/;
 
       if(!(e.target.validity.valid)){
         setpassworderror('Please enter password')
@@ -146,6 +146,9 @@ const PersonalDetails = (props) =>{
                 <TextField label="Gender" value={props.details?.Gender} fullWidth disabled/>
               </Grid>
           </Grid>
+          <Grid item xs={12}>
+                <TextField label="Email" value={props.details?.Email} fullWidth disabled/>
+              </Grid>
           <Grid item xs={6}>
             <TextField label="Address" value={props.details?.Address?.Address} fullWidth disabled/>
           </Grid>
@@ -183,7 +186,6 @@ const PersonalDetails = (props) =>{
                     <h4>Password</h4>
                     1. Password should contain atleast 8 characters.<br></br>
                     2. Must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.<br></br>
-                    3. Only $, @, #, _ are allowed as special characters
                   </Typography>
                   </Box>
                   </Modal>

@@ -220,7 +220,7 @@ const Post_mat_VJNT = () => {
           <div>8. <b>Leaving Certificate</b></div>
           <div>9. <b>Declaration certificate of parents/guardians about number of children beneficiaries.</b></div>
         </div>
-        <center><Button variant='contained'>apply</Button></center>
+        <center><Button variant='contained' href="/post-matric-vjnt-form">apply</Button></center>
       </div>
     </>
   );

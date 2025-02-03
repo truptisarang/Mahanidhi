@@ -1,16 +1,17 @@
 import Sidebar from "../Dashboard/Sidebar";
 import "../Dashboard/Dashboard.css"
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet} from "react-router-dom";
 
-const Layout = ({children}) =>{
-    const username = useSelector((state)=>state.Profile.username)
-    const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
-    const navigate = useNavigate(); // For navigation in case of redirection
+const Layout = () =>{
+    // const username = useSelector((state)=>state.Profile.username)
+    // const isProfileCompleted = useSelector((state)=>state.Profile.isProfileCompleted)
+    const isLoggedIn = useSelector((state)=>state.Profile.isLoggedIn)
 
-    if(!(username && isProfileCompleted)){
-      navigate("/login")
-    }
+
+    // if(!(username && isProfileCompleted)){
+    //   navigate("/login")
+    // }
     return (
       <>
         <div id="dashboard_container">
@@ -18,7 +19,8 @@ const Layout = ({children}) =>{
             <Sidebar />
           </div>
           <div id="main_content">
-            {children}
+          {/* {children} */}
+           {isLoggedIn ? <Outlet/>  : <Navigate to='/login'/>}
           </div>
         </div>
       </>

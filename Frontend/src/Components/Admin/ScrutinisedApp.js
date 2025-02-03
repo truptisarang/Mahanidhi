@@ -136,7 +136,7 @@ const ScrutinisedApp = () => {
               })}
             </TableBody>
           </Table>
-        </TableContainer>) : <center>No pending applications !!!</center>}
+        </TableContainer>) : <center>You haven't scrutinised any applications yet !!!</center>}
       </Box>
     </>        
     );

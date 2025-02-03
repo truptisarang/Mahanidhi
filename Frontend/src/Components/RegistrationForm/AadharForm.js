@@ -31,6 +31,7 @@ const AadharForm = () => {
   const [userData, setuserData] = useState(null);
   const [Loading, setLoading] = useState(false);
 
+
   const checkAadharNumber = (e) => {
     const aadhaar = e.target.value;
     setAadhar(aadhaar);
@@ -73,30 +74,41 @@ const AadharForm = () => {
     try {
     setLoading(true)
     const response = await axios.post("http://localhost:5000/verifyAadhaar", {aadhaar_number: Aadhar});
+    console.log(response)
       if(response.data.data) {
         setuserData(response.data?.data);
         toast.success(response.data.message);
         setOTPsent(true);
         setLoading(false)
       }else{
+        setLoading(false)
         toast.error(response.data.message)
       }
     }catch(error){
-      toast.error(error)
+      if(error.response){
+        toast.error(`Error: ${error.response.data || "Something went wrong!"}`)
+        setLoading(false)
+      }
     }
   };
 
   const verifyOTP = async () => {
-    // const response = await axios.post("https://a01b5d91-f944-407e-b99f-c1dc524c1dcc.mock.pstmn.io/auth/verifyOTP");
-    // console.log(response);
-    // setuserData(response.data?.data);
-    setOTP("");
-  
-    // if (response?.data?.status === "success"){
-    //   setOTP("")
-    setOTPsent(false)
-    goToNext();
-    // }
+    const response = await axios.post(
+      "http://localhost:5000/verifyAadhaarOTP",
+      { userData, OTP }
+    );
+    console.log(response)
+    if (response.data.success) {
+      toast.success(response.data.message);
+      setuserData(response.data.data)
+      setOTP("");
+      setOTPsent(false);
+      goToNext()
+    } else {
+      toast.error(response.data.message);
+      setOTP("");
+      setOTPsent(false)
+    }
   };
 
   const handleKeyDown = (e) => {
@@ -114,12 +126,12 @@ const AadharForm = () => {
     <>
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={3000}
         hideProgressBar={false}
         rtl={false}
         pauseOnFocusLoss
         pauseOnHover
-        theme="dark"
+        theme="colored"
       />
       <h3>Beneficiary Registration</h3>
       <Box sx={{ width: "100%" }}>

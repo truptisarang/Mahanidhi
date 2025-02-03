@@ -1,14 +1,47 @@
 import React, { useEffect, useState } from "react";
 import "../Home/Home.css";
-import Accordion from "@mui/material/Accordion";
-import AccordionActions from "@mui/material/AccordionActions";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import { NavLink } from "react-router-dom";
 
 const Home = () => {
+
+  const eligible_schemes = [
+    {
+      SchemeName: "Post Matric Scholarship to OBC students",
+      DepartmentName: "OBC, SEBC, VJNT & SBC Welfare Department",
+      SchemeType: "Scholarship",
+      CasteCategory:"OBC",
+      MaxIncome:150000,
+      link:"/eligible-schemes/post-matric-obc-eligibility-criteria"
+    },
+    {
+      SchemeName: "Post Matric Scholarship to SBC students",
+      DepartmentName: "OBC, SEBC, VJNT & SBC Welfare Department",
+      SchemeType: "Scholarship",
+      CasteCategory:"SBC",
+      MaxIncome:150000,
+      link:"/eligible-schemes/post-matric-sbc-eligibility-criteria"
+    },
+    {
+      SchemeName: "Post Matric Scholarship to VJNT students",
+      DepartmentName: "OBC, SEBC, VJNT & SBC Welfare Department",
+      CasteCategory:"VJNT",
+      MaxIncome:150000,
+      SchemeType: "Scholarship",
+      link:"/eligible-schemes/post-matric-vjnt-eligibility-criteria"
+    },
+  ];
+
+
   return (
     <>
       <div id="homeContainer">
@@ -24,55 +57,44 @@ const Home = () => {
         </div>
         <div id="department">
           <h1>Scholarships</h1>
-          <center>
-            Click on the schemes to know more about eligibility criteria
-          </center>
+          
           <br></br>
           <div id="dept">
-            <Accordion expanded={true}>
-              <AccordionSummary
-                aria-controls="panel1-content"
-                id="panel1-header"
-                style={{ backgroundColor: "#CCD343" }}
-              >
-                Post Matric Scholarship
-              </AccordionSummary>
-              <AccordionDetails>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
-                  >
-                    VJNT, SBC and OBC Welfare Department
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <NavLink
-                      className="scheme-link"
-                      to={"/post-matric-sbc-eligibility-criteria"}
-                    >
-                      Post Matric Scholarship to SBC Students
-                    </NavLink>
-                  </AccordionDetails>
-                  <AccordionDetails>
-                    <NavLink
-                      className="scheme-link"
-                      to={"/post-matric-vjnt-eligibility-criteria"}
-                    >
-                      Post Matric Scholarship to VJNT Students
-                    </NavLink>
-                  </AccordionDetails>
-                  <AccordionDetails>
-                    <NavLink
-                      className="scheme-link"
-                      to={"/post-matric-obc-eligibility-criteria"}
-                    >
-                      Post Matric Scholarship to OBC Students
-                    </NavLink>
-                  </AccordionDetails>
-                </Accordion>
-              </AccordionDetails>
-            </Accordion>
+          <TableContainer component={Paper}>
+        <Table>
+          <TableHead style={{ backgroundColor: "#F9EE99" }}>
+            <TableRow>
+              <TableCell>
+                <b>Scheme Name</b>
+              </TableCell>
+              <TableCell>
+                <b>Department Name</b>
+              </TableCell>
+              <TableCell>
+                <b>Scheme Type</b>
+              </TableCell>
+              <TableCell>
+                <b>Action</b>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+           
+             {
+              eligible_schemes.map((scheme)=>{
+                    return(
+                        <TableRow>
+                        <TableCell>{scheme.SchemeName}</TableCell>
+                        <TableCell>{scheme.DepartmentName}</TableCell>
+                        <TableCell>{scheme.SchemeType}</TableCell>
+                        <TableCell><Button href={scheme.link}>Know More</Button></TableCell>
+                        </TableRow>
+                    )
+                })
+             }
+          </TableBody>
+        </Table>
+      </TableContainer>
           </div>
         </div>
       </div>

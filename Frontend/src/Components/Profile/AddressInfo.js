@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 import TextField from '@mui/material/TextField';
 import { Box, Button } from "@mui/material";
+import { useSelector } from "react-redux";
+import axios from 'axios';
 
 export const AddressInfo = (props) => {
-  const [Address, setAddress] = useState({Address:"", State:"", District:"", Taluka:"", Village:"", Pincode:""})
 
+  const aadhaar_number = useSelector((state)=>state.Profile.aadhaar)
+  const [Address, setAddress] = useState({Address:"", State:"", District:"", Taluka:"", Village:"", Pincode:""})
+  const getAdressDetails = async() =>{
+    const response = await axios.post("http://localhost:5000/getPersonalDetails", {Aadhaar:aadhaar_number})
+    setAddress(response.data.data.Address)
+  }
   useEffect(()=>{
     const details = JSON.parse(sessionStorage.getItem("Details"))
-    setAddress(details?.Address)
+    getAdressDetails()
+    // setAddress(details?.Address)
   },[])
   
   const gotonext = props.nextHandler
@@ -26,54 +34,46 @@ export const AddressInfo = (props) => {
       rows={2}
       variant="outlined" 
       value={Address?.Address}
-      onChange={(e)=>{
-        setAddress({...Address, Address:e.target.value})
-      }}
+      disabled={true}
       fullWidth 
     />
     <TextField
       label="State"
       variant="outlined" 
       value={Address?.State}
-      onChange={(e)=>{
-        setAddress({...Address, State:e.target.value})
-      }}
+      disabled={true}
+
       fullWidth 
     />
     <TextField
       label="District"
       variant="outlined" 
       value={Address?.District}
-      onChange={(e)=>{
-        setAddress({...Address, District:e.target.value})
-      }}
+      disabled={true}
+
       fullWidth 
     />
     <TextField
       label="Taluka"
       variant="outlined" 
       value={Address?.Taluka}
-      onChange={(e)=>{
-        setAddress({...Address, Taluka:e.target.value})
-      }}
+      disabled={true}
+
       fullWidth 
     />
     <TextField
       label="Village"
       variant="outlined" 
       value={Address?.Village}
-      onChange={(e)=>{
-        setAddress({...Address, Village:e.target.value})
-      }}
+      disabled={true}
+
       fullWidth 
     />
     <TextField
       label="Pincode"
       variant="outlined" 
       value={Address?.Pincode}
-      onChange={(e)=>{
-        setAddress({...Address, Pincode:e.target.value})
-      }}
+      disabled={true}
       fullWidth 
     />
     </div>

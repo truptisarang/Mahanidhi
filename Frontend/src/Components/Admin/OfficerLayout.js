@@ -1,7 +1,11 @@
+import { Navigate, Outlet } from "react-router-dom";
 import "../Dashboard/Dashboard.css"
 import OfficerSidebar from "./OfficerSidebar";
+import { useSelector } from "react-redux";
 
-const OfficerLayout = ({children}) =>{
+const OfficerLayout = () =>{
+    const isLoggedIn = useSelector((state)=>state.Officer.isLoggedIn)
+    
     return (
       <>
         <div id="dashboard_container">
@@ -9,7 +13,7 @@ const OfficerLayout = ({children}) =>{
             <OfficerSidebar />
           </div>
           <div id="main_content">
-            {children}
+            {isLoggedIn ? <Outlet/> : <Navigate to="/officer-login"/>}
           </div>
         </div>
       </>
