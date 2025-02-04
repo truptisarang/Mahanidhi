@@ -30,7 +30,7 @@ const Loginlimiter = rate_limit({
 
 const limiter = rate_limit({
   max:200,
-  windowMs:60 * 60 * 1000,
+  windowMs:120 * 60 * 1000,
   message:"Too many requests. Please try again later in 15 minutes."
 });
 
