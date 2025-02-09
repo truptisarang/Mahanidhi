@@ -35,9 +35,12 @@ const Dashboard = () => {
   useEffect(() => {
    const fetchWalletBalance = async() =>{
     const walletAddress = await getWallet();
-    console.log(walletAddress)
+    console.log("Wallet Address:",walletAddress)
     if(walletAddress){
        await getUSDCBalance(walletAddress)        
+       console.log(Balance)
+    }else{
+      return;
     }
    }
    fetchWalletBalance();
