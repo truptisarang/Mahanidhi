@@ -4,8 +4,10 @@ import Button from '@mui/material/Button';
 import './WalletCreation.css'
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
 const WalletCreation = (props) =>{
+    const backend_url = process.env.REACT_APP_BACKEND_URL;
     useEffect(()=>{
       const uname = sessionStorage.getItem("Username")
       const passwd = sessionStorage.getItem("Password")
@@ -20,19 +22,20 @@ const WalletCreation = (props) =>{
     const [Creds, setCreds]=useState({username: "", password:""});
     const [personal_details, setpersonal_details]=useState({username: "", password:""});
     const goToNext = props.next;
-    const generateWallet = () =>{
+    const generateWallet = async() =>{
         const newWallet = ethers.Wallet.createRandom();
         if(newWallet){
-            setWallet(newWallet.address)
             const WalletFile = `Wallet Info\nWallet address: ${newWallet?.address}\nPrivate key:${newWallet?.privateKey}\nSecret recovery phrase/Mnemonic:${newWallet?.mnemonic.phrase}`;
             const blob = new Blob([WalletFile], { type: "text/plain" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
             link.download = "wallet-info.txt";
             link.click();
-            sessionStorage.setItem("WalletAddr", Wallet)
-            const response = axios.post("https://mahanidhibackend.onrender.com/storePersonalDetails",{creds:Creds, pd:personal_details})
-            goToNext();
+            const response = await axios.post(`${backend_url}/storePersonalDetails`,{creds:Creds, pd:personal_details, walletAddr:newWallet.address})
+            if(response.data.success){
+              toast.success(response.data.message)
+              goToNext();
+            }
         }
     }
 
@@ -42,6 +45,15 @@ const WalletCreation = (props) =>{
        
     return(
         <>
+        <ToastContainer
+                position="top-center"
+                autoClose={3000}
+                hideProgressBar={false}
+                rtl={false}
+                pauseOnFocusLoss
+                pauseOnHover
+                theme="colored"
+              />
       <b id='warning'>WARNING !</b> 
       <div id='instructions'>
         <p>1. <b>Wallet Info</b>:  You’ll get a wallet address, mnemonic (secret or seed phrase), and private key in a file. Keep this file safe. Don’t store it online or share it.</p>

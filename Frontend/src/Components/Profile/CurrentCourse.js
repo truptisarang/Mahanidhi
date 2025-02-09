@@ -21,9 +21,30 @@ import Qualification from "../../data/Qualification";
 import Stream from "../../data/Stream";
 import CollegeNames from "../../data/CollegeNames";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
+import { useSelector } from "react-redux";
+
 
 const CurrentCourse = (props) => {
+  const aadhaar = useSelector((state) => state.Profile.aadhaar);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+
+  const getDetails = async () => {
+    try {
+      const response = await axios.post(
+        `${backend_url}/getPersonalDetails`,
+        { Aadhaar: aadhaar }
+      );
+      if (response.data.data) {
+        const data = response.data.data;
+        setCourseData(data["PersonalInfo.CourseDetails"] || {});
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
+    getDetails()
     const CourseDetails = JSON.parse(sessionStorage.getItem("CourseDetails")) || [];
     setAcademicData(CourseDetails);
   }, []);
@@ -112,10 +133,11 @@ const CurrentCourse = (props) => {
               Admission Year in Current Course
             </InputLabel>
             <Select
+              name="admyear"
               style={{ width: "100%" }}
               labelId="AYLabel"
               label="Admission Year in Current Course"
-              value={CourseData.admissionYear}
+              value={CourseData?.admissionYear}
               onChange={(e) =>
                 setCourseData({ ...CourseData, admissionYear: e.target.value })
               }
@@ -132,10 +154,11 @@ const CurrentCourse = (props) => {
           <FormControl>
             <InputLabel id="IStateLabel">Institute State</InputLabel>
             <Select
+              name="IState"
               style={{ width: "100%" }}
               labelId="IStateLabel"
               label="Institute State"
-              value={CourseData.instituteState}
+              value={CourseData?.instituteState}
               onChange={(e) =>
                 setCourseData({ ...CourseData, instituteState: e.target.value })
               }
@@ -152,10 +175,11 @@ const CurrentCourse = (props) => {
           <FormControl>
             <InputLabel id="IDistLabel">Institute District</InputLabel>
             <Select
+              name="IDist"
               style={{ width: "100%" }}
               labelId="IDistLabel"
-              label="Institute State"
-              value={CourseData.instituteDistrict}
+              label="Institute District"
+              value={CourseData?.instituteDistrict}
               onChange={(e) =>
                 setCourseData({
                   ...CourseData,
@@ -164,7 +188,7 @@ const CurrentCourse = (props) => {
               }
             >
               {statesWithDistricts
-                .filter((state) => state.state === CourseData.instituteState)
+                .filter((state) => state.state === CourseData?.instituteState)
                 .map((st) =>
                   st.districts.map((dist, index) => (
                     <MenuItem key={index} value={dist}>
@@ -178,9 +202,10 @@ const CurrentCourse = (props) => {
             <InputLabel id="ITalLabel">Institute Taluka</InputLabel>
             <Select
               style={{ width: "100%" }}
+              name="ITal"
               labelId="ITalLabel"
               label="Institute Taluka"
-              value={CourseData.instituteTaluka}
+              value={CourseData?.instituteTaluka}
               onChange={(e) =>
                 setCourseData({
                   ...CourseData,
@@ -189,7 +214,7 @@ const CurrentCourse = (props) => {
               }
             >
               {statesWithDistricts
-                .filter((state) => state.state === CourseData.instituteState)
+                .filter((state) => state.state === CourseData?.instituteState)
                 .map((st) =>
                   st.districts.map((dist, index) => (
                     <MenuItem key={index} value={dist}>
@@ -202,10 +227,11 @@ const CurrentCourse = (props) => {
           <FormControl>
             <InputLabel id="QualiLabel">Qualification</InputLabel>
             <Select
+              name="Quali"
               style={{ width: "100%" }}
               labelId="QualiLabel"
               label="Qualification"
-              value={CourseData.qualification}
+              value={CourseData?.qualification}
               onChange={(e) =>
                 setCourseData({ ...CourseData, qualification: e.target.value })
               }
@@ -218,10 +244,11 @@ const CurrentCourse = (props) => {
           <FormControl>
             <InputLabel id="StreamLabel">Stream</InputLabel>
             <Select
+              name="Stream"
               style={{ width: "100%" }}
               labelId="StreamLabel"
               label="Stream"
-              value={CourseData.stream}
+              value={CourseData?.stream}
               onChange={(e) =>
                 setCourseData({ ...CourseData, stream: e.target.value })
               }
@@ -236,8 +263,9 @@ const CurrentCourse = (props) => {
             <Select
               style={{ width: "100%" }}
               labelId="ClgLabel"
+              name="ClgName"
               label="College Name/ School Name"
-              value={CourseData.instituteName}
+              value={CourseData?.instituteName}
               onChange={(e) =>
                 setCourseData({ ...CourseData, instituteName: e.target.value })
               }
@@ -253,13 +281,14 @@ const CurrentCourse = (props) => {
               style={{ width: "100%" }}
               labelId="CourseLabel"
               label="Course Name"
-              value={CourseData.courseName}
+              name="course_name"
+              value={CourseData?.courseName}
               onChange={(e) =>
                 setCourseData({ ...CourseData, courseName: e.target.value })
               }
             >
               {CollegeNames.filter(
-                (cldata) => cldata.name === CourseData.instituteName
+                (cldata) => cldata.name === CourseData?.instituteName
               ).map((clg) => {
                 return clg.courses.map((c, index) => (
                   <MenuItem key={index} value={c}>
@@ -274,8 +303,9 @@ const CurrentCourse = (props) => {
             <Select
               style={{ width: "100%" }}
               labelId="YosLabel"
+              name="Yos"
               label="Year of study"
-              value={CourseData.yearOfStudy}
+              value={CourseData?.yearOfStudy}
               onChange={(e) =>
                 setCourseData({ ...CourseData, yearOfStudy: e.target.value })
               }
@@ -290,8 +320,9 @@ const CurrentCourse = (props) => {
             <Select
               style={{ width: "100%" }}
               labelId="CPLabel"
+              name="Degree_Status"
               label="Completed / Pursuing"
-              value={CourseData.completedPursuing}
+              value={CourseData?.completedPursuing}
               onChange={(e) =>
                 setCourseData({
                   ...CourseData,
@@ -308,8 +339,9 @@ const CurrentCourse = (props) => {
             <Select
               style={{ width: "100%" }}
               labelId="ProfLabel"
+              name="Is_professional"
               label="Is Professional?"
-              value={CourseData.isProfessional}
+              value={CourseData?.isProfessional}
               onChange={(e) =>
                 setCourseData({ ...CourseData, isProfessional: e.target.value })
               }
@@ -322,13 +354,14 @@ const CurrentCourse = (props) => {
               </MenuItem>
             </Select>
           </FormControl>
-          <FormControl>
+         {CourseData.completedPursuing === "Completed" ? <FormControl>
             <InputLabel id="resultLabel">Result</InputLabel>
             <Select
               style={{ width: "100%" }}
               labelId="resultLabel"
+              name="result"
               label="Result"
-              value={CourseData.result}
+              value={CourseData?.result}
               onChange={(e) =>
                 setCourseData({ ...CourseData, result: e.target.value })
               }
@@ -336,7 +369,7 @@ const CurrentCourse = (props) => {
               <MenuItem value={"Passed"}>Passed</MenuItem>
               <MenuItem value={"Failed"}>Failed</MenuItem>
             </Select>
-          </FormControl>
+          </FormControl> : null}
 
           <FormControl>
             <InputLabel id="ModeLabel">Mode</InputLabel>
@@ -344,7 +377,8 @@ const CurrentCourse = (props) => {
               style={{ width: "100%" }}
               labelId="ModeLabel"
               label="Mode"
-              value={CourseData.mode}
+              name="mode"
+              value={CourseData?.mode}
               onChange={(e) =>
                 setCourseData({ ...CourseData, mode: e.target.value })
               }

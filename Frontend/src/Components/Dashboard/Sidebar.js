@@ -16,7 +16,7 @@ const Sidebar = () =>{
         {icons:<DashboardIcon/>, to:"/dashboard", text:"Dashboard", restricted:true},
         {icons:<FeedIcon/>, to:"/myapplications", text:"My applications", restricted:true},
         {icons:<ChecklistOutlinedIcon/>, to:"/eligible-schemes", text:"Eligible Schemes", restricted:true},
-        {icons:<NotificationsIcon/>, to:"/notifications", text:"Notifications", restricted:true},
+        // {icons:<NotificationsIcon/>, to:"/notifications", text:"Notifications", restricted:true},
         {icons:<PersonIcon/>, to:"/profile", text:"Profile", restricted:false},
     ]
     

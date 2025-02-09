@@ -31,7 +31,8 @@ const VisuallyHiddenInput = styled("input")({
 });
 const SchemeForm = (props) => {
   const aadhaar = useSelector((state) => state.Profile.aadhaar);
-
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+  
   const [FormData, setFormData] = useState({
     schemeName: props.schemeName,
     deptName: props.deptName,
@@ -56,13 +57,15 @@ const SchemeForm = (props) => {
     NoOfMaleChildren: "",
   });
 
+  
+
   const submitForm = async (e) => {
     try {
       e.preventDefault();
       if (validateForm()) {
         return;
       }
-      const response = await axios.post("https://mahanidhibackend.onrender.com/submitForm", {
+      const response = await axios.post(`${backend_url}/submitForm`, {
         form_data: FormData,
         Aadhaar: aadhaar,
         date:new Date().toLocaleDateString()
@@ -95,7 +98,9 @@ const SchemeForm = (props) => {
       }
     } catch (error) {
       console.log(error)
-      toast.error("Error", error.response);
+      if(error.response){
+        toast.error("Error:", error);
+      }
     }
   };
 

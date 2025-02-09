@@ -49,6 +49,7 @@ const AdminDashboard = () => {
   ];
   const openEModal = () => setopenEditModal(true);
   const closeEModal = () => setopenEditModal(false);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   const closeDeleteModal = () => {
     setConfirmDelete(false); // Close the modal
@@ -92,7 +93,7 @@ const AdminDashboard = () => {
 
   const handleDelete = async (officerid) => {
     try {
-      const response = await axios.post("https://mahanidhibackend.onrender.com/deleteOfficer", {
+      const response = await axios.post(`${backend_url}/deleteOfficer`, {
         officer_id: DeleteAppID,
       });
 
@@ -150,19 +151,21 @@ const AdminDashboard = () => {
   const [ShowPassword, setShowPassword] = useState(false);
   useEffect(() => {
     fetchOfficerDetails();
-  }, [Details]);
+  }, []);
+
   const fetchOfficerDetails = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getOfficerDetails"
+        `${backend_url}/getOfficerDetails`
       );
       if (response) {
         setDetails(response.data.data);
       } else {
-        toast.info("No officer details found");
+        toast.info("Currently no officers have been added.");
       }
     } catch (error) {
-      toast.error("Error", error);
+      if(error.response)
+      toast.error("Error",error.response);
     }
   };
 
@@ -190,7 +193,7 @@ const AdminDashboard = () => {
         }));
         if (officerData && officerData.officerid !== "") {
           const response = await axios.post(
-            "https://mahanidhibackend.onrender.com/addOfficer",
+            `${backend_url}/addOfficer`,
             { OfficerData: officerData }
           );
           if (response.data.msg === "success") {
@@ -216,6 +219,7 @@ const AdminDashboard = () => {
               department: "",
               designation: "",
             });
+            fetchOfficerDetails();
             closeAModal();
           } else {
             toast.error("Some error occurred while adding officer details");

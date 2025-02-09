@@ -22,6 +22,7 @@ import { Box, Typography, TextField, Grid } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const MyApplications = () => {
+  const backend_url = process.env.REACT_APP_BACKEND_URL
   const aadhaar = useSelector((state) => state.Profile.aadhaar);
   const [AcademicData, setAcademicData] = useState([]);
   const [ViewForm, setViewForm] = useState(false);
@@ -46,29 +47,31 @@ const MyApplications = () => {
   const getApplicationsDetails = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getApplications",
+        `${backend_url}/getApplications`,
         { Aadhaar: aadhaar,mode:"user" }
       );
       if(response.data.data !== null){
-        setApplications([response.data.data])
+        setApplications(response.data.data)
+      }else{
+
       }
       // setAllDetails(response.data.data);
       // setAcademicData(response.data.data["CourseDetails"]);
     } catch (error) {
-      toast.error("Error while fetching applications");
+      toast.error(error.response.data.message);
     }
   };
 
   const getPersonalDetails = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getPersonalDetails",
+        `${backend_url}/getPersonalDetails`,
         { Aadhaar: aadhaar }
       );
       setAllDetails(response.data.data);
       setAcademicData(response.data.data["CourseDetails"]);
     } catch (error) {
-      toast.error("Error while fetching details");
+      toast.error(error.response.data.message);
     }
   };
 
@@ -90,7 +93,7 @@ const MyApplications = () => {
   const handleDelete = async (app) => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/cancelApplication",
+        `${backend_url}/cancelApplication`,
         {
           AppID: app.AppID,
         }

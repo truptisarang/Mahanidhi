@@ -13,12 +13,13 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 
 const EligibleSchemes = () => {
+    const backend_url = process.env.REACT_APP_BACKEND_URL
     const [Details, setDetails] = useState({})
     const aadhaar = useSelector((state) => state.Profile.aadhaar);
     const getDetails = async () => {
         try {
           const response = await axios.post(
-            "https://mahanidhibackend.onrender.com/getPersonalDetails",
+            `${backend_url}/getPersonalDetails`,
             { Aadhaar: aadhaar }
           );
           if (response.data.data) {

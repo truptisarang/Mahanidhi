@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 import axios from 'axios';
 
 export const AddressInfo = (props) => {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   const aadhaar_number = useSelector((state)=>state.Profile.aadhaar)
   const [Address, setAddress] = useState({Address:"", State:"", District:"", Taluka:"", Village:"", Pincode:""})
   const getAdressDetails = async() =>{
-    const response = await axios.post("https://mahanidhibackend.onrender.com/getPersonalDetails", {Aadhaar:aadhaar_number})
+    const response = await axios.post(`${backend_url}/getPersonalDetails`, {Aadhaar:aadhaar_number})
     setAddress(response.data.data.Address)
   }
   useEffect(()=>{

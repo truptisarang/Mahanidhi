@@ -30,6 +30,7 @@ const AadharForm = () => {
   const [OTP, setOTP] = useState("");
   const [userData, setuserData] = useState(null);
   const [Loading, setLoading] = useState(false);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
 
   const checkAadharNumber = (e) => {
@@ -73,7 +74,7 @@ const AadharForm = () => {
   const verifyAadhaar = async () => {
     try {
     setLoading(true)
-    const response = await axios.post("https://mahanidhibackend.onrender.com/verifyAadhaar", {aadhaar_number: Aadhar});
+    const response = await axios.post(`${backend_url}/verifyAadhaar`, {aadhaar_number: Aadhar});
     console.log(response)
       if(response.data.data) {
         setuserData(response.data?.data);
@@ -94,7 +95,7 @@ const AadharForm = () => {
 
   const verifyOTP = async () => {
     const response = await axios.post(
-      "https://mahanidhibackend.onrender.com/verifyAadhaarOTP",
+      `${backend_url}/verifyAadhaarOTP`,
       { userData, OTP }
     );
     console.log(response)

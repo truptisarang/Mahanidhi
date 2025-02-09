@@ -19,6 +19,7 @@ import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 
 const ScrutinisedApp = () => {
+  const backend_url = process.env.REACT_APP_BACKEND_URL
   const deptName = useSelector((state) => state.Officer.deptName);
   const [Applications, setApplications] = useState([])
   const [openViewModal, setopenViewModal] = useState(false);
@@ -39,7 +40,7 @@ const ScrutinisedApp = () => {
   const getApplications = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getApplications",
+        `${backend_url}/getApplications`,
         { mode: "officer", DeptName: deptName, scrutinised:true, status: "Pending" }
       );
       if (response.data.data) {

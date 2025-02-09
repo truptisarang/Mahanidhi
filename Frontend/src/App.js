@@ -53,7 +53,7 @@ function App() {
             <Route path='/dashboard' element={<Dashboard/>}/>
             <Route path='/profile' element={<Profile/>}/>
             <Route path='/myapplications' element={<MyApplications/>}/>
-            <Route path='/notifications' element={<Notifications/>}/>
+            {/* <Route path='/notifications' element={<Notifications/>}/> */}
             <Route path='/eligible-schemes' element={<EligibleSchemes/>}/>
             <Route path='/post-matric-sbc-form' element={<SchemeForm schemeName="Post Matric Scholarship to SBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/>}/>
             <Route path='/post-matric-obc-form' element={<SchemeForm schemeName="Post Matric Scholarship to OBC students" deptName="OBC, SEBC, VJNT & SBC Welfare Department"/>}/>

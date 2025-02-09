@@ -19,6 +19,7 @@ const Hostel = (props) => {
     const data = sessionStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   };
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   const pi = getData("PersonalInfo");
   const cd = getData("CourseDetails");
@@ -27,7 +28,7 @@ const Hostel = (props) => {
   const SaveDetails = async () => {
     try {
       const response = await axios.post(
-        `https://mahanidhibackend.onrender.com/updateProfile/${aadhaarId}`,
+        `${backend_url}/updateProfile/${aadhaarId}`,
         { pi, cd, BCategory }
       );
       console.log(response.data);
@@ -48,7 +49,7 @@ const Hostel = (props) => {
         autoClose={3000}
         hideProgressBar={false}
         rtl={false}
-        theme="dark"
+        theme="colored"
       />
       <h3>Beneficary Category</h3>
       <RadioGroup

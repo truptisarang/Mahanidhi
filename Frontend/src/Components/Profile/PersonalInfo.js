@@ -20,7 +20,6 @@ import { styled } from "@mui/material/styles";
 import axios from "axios";
 import CasteList from "../../data/MatrimonialReligionAndCaste.json";
 import { toast, ToastContainer } from "react-toastify";
-import { red } from "@mui/material/colors";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -73,7 +72,8 @@ const PersonalInfo = (props) => {
     PhoneNumber: "",
     Age: "",
     Gender: "",
-    Email: ""
+    Email: "",
+    WalletAddress:""
   });
   const [HaveCC, setHaveCC] = useState("No");
   const [HaveIC, setHaveIC] = useState("No");
@@ -98,7 +98,7 @@ const PersonalInfo = (props) => {
     const dommh = PersonalInfo?.DomicileCert ? "Yes" : "No";
     setDomicileM(dommh);
     setHaveDC(dommh);
-  }, [PersonalInfo]);
+  }, []);
 
   // useEffect(() => {
   //   const storedInfo = getfromSession("PersonalInfo");
@@ -146,10 +146,12 @@ const PersonalInfo = (props) => {
   const [Errors, setErrors] = useState({});
   const { activeStep, setactiveStep } = props.activeStep;
   const aadhaar = useSelector((state) => state.Profile.aadhaar);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+
   const getDetails = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getPersonalDetails",
+        `${backend_url}/getPersonalDetails`,
         { Aadhaar: aadhaar }
       );
       if (response.data.data) {
@@ -248,7 +250,7 @@ const PersonalInfo = (props) => {
                   label="Applicant's Full Name (As per SSC Marksheet / LC"
                   fullWidth
                   name="applicant-name"
-                  value={PersonalInfo?.AppFullName}
+                  value={PersonalInfo?.AppFullName || ""}
                   error={Errors && Errors.AppName}
                   helperText={Errors.AppName}
                   onChange={(e) => {
@@ -269,22 +271,24 @@ const PersonalInfo = (props) => {
                 <FormControl>
                   <InputLabel id="msLabel">Marital Status</InputLabel>
                   <Select
+                    name="marital_status"
                     style={{ width: "100%" }}
                     labelId="msLabel"
                     label="Marital Status"
                     required
-                    value={PersonalInfo?.MaritalStatus}
+                    value={PersonalInfo?.MaritalStatus || ""}
                     onChange={(e) => {
+                      console.log(PersonalInfo?.MaritalStatus)
                       setPersonalInfo({
                         ...PersonalInfo,
                         MaritalStatus: e.target.value,
                       });
                     }}
                   >
-                    <MenuItem value={"Unmarried"}>Unmarried</MenuItem>
-                    <MenuItem value={"Married"}>Married</MenuItem>
-                    <MenuItem value={"Divorcee"}>Divorcee</MenuItem>
-                    <MenuItem value={"Widow"}>Widow</MenuItem>
+                    <MenuItem value="Unmarried">Unmarried</MenuItem>
+                    <MenuItem value="Married">Married</MenuItem>
+                    <MenuItem value="Divorcee">Divorcee</MenuItem>
+                    <MenuItem value="Widow">Widow</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
@@ -303,6 +307,7 @@ const PersonalInfo = (props) => {
                 <TextField
                   variant="outlined"
                   label="Mobile Number"
+                  name="phone_number"
                   value={Details.PhoneNumber || ""}
                   disabled
                   fullWidth
@@ -339,6 +344,7 @@ const PersonalInfo = (props) => {
             <FormControl>
               <InputLabel id="rLabel">Religion</InputLabel>
               <Select
+                name="Religion"
                 labelId="rLabel"
                 label="Religion"
                 value={PersonalInfo?.Religion || ""}
@@ -369,6 +375,7 @@ const PersonalInfo = (props) => {
                 <FormControl>
                   <InputLabel id="cLabel">Caste Category</InputLabel>
                   <Select
+                    name="Caste_Category"
                     labelId="cLabel"
                     label="Caste Category"
                     value={PersonalInfo?.CasteCategory || ""}
@@ -391,6 +398,7 @@ const PersonalInfo = (props) => {
                 <FormControl>
                   <InputLabel id="casteLabel">Caste</InputLabel>
                   <Select
+                    name="Caste"
                     labelId="casteLabel"
                     label="Caste"
                     value={PersonalInfo?.Caste || ""}
@@ -445,12 +453,13 @@ const PersonalInfo = (props) => {
                   <Box display="flex" flexDirection="column" gap={2}>
                     <TextField
                       required
+                      name="CCN"
                       variant="outlined"
                       label="Caste Certificate Number"
                       fullWidth
                       error={Errors && Errors.CC}
                       helperText={Errors.CC}
-                      value={PersonalInfo?.CasteCert?.Number}
+                      value={PersonalInfo?.CasteCert?.Number || ""}
                       onChange={(e) => {
                         setPersonalInfo({
                           ...PersonalInfo,
@@ -471,6 +480,7 @@ const PersonalInfo = (props) => {
                     ></TextField>
                     <TextField
                       required
+                      name="CC_IDist"
                       variant="outlined"
                       label="Issuing District"
                       fullWidth
@@ -497,9 +507,10 @@ const PersonalInfo = (props) => {
                     ></TextField>
                     <TextField
                       required
+                      name="CC_ApplName"
                       variant="outlined"
                       label="Applicant Name"
-                      value={PersonalInfo?.CasteCert?.ApplName}
+                      value={PersonalInfo?.CasteCert?.ApplName || ""}
                       error={Errors && Errors.CCApplName}
                       helperText={Errors.CCApplName}
                       onChange={(e) => {
@@ -523,6 +534,7 @@ const PersonalInfo = (props) => {
                     ></TextField>
                     <TextField
                       required
+                      name="CC_IAuth"
                       variant="outlined"
                       label="Issuing Authority"
                       value={PersonalInfo?.CasteCert?.IAuth || ""}
@@ -549,6 +561,7 @@ const PersonalInfo = (props) => {
                     ></TextField>
                     <TextField
                       variant="outlined"
+                      name="CC_IDate"
                       required
                       label="Issuing Date"
                       error={Errors && Errors.CCIDate}
@@ -583,11 +596,12 @@ const PersonalInfo = (props) => {
                       <VisuallyHiddenInput
                         type="file"
                         required
+                        name="CCDoc"
                         onChange={(event) => {
                           const CCfile = event.target.files[0];
                           if (!CCfile) {
                             setCCFile("");
-                            toast.error("Please upload income certificate");
+                            toast.error("Please upload caste certificate");
                             setPersonalInfo({
                               ...PersonalInfo,
                               CasteCert: {
@@ -643,6 +657,7 @@ const PersonalInfo = (props) => {
               <Box display="flex" flexDirection="column" gap={2}>
                 <TextField
                   variant="outlined"
+                  name="income_details"
                   label="Family Annual Income"
                   required
                   value = {PersonalInfo?.IncomeDetails}
@@ -651,10 +666,7 @@ const PersonalInfo = (props) => {
                   onChange={(e) => {
                     setPersonalInfo({
                       ...PersonalInfo,
-                      CasteCert: {
-                        ...PersonalInfo,
                         IncomeDetails: e.target.value,
-                      },
                     });
                     if (e.target.value === "") {
                       setErrors({
@@ -704,6 +716,7 @@ const PersonalInfo = (props) => {
                 <>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <TextField
+                      name="ICN"
                       variant="outlined"
                       label="Income Certificate Number"
                       value={PersonalInfo?.IncomeCert?.Number}
@@ -732,6 +745,7 @@ const PersonalInfo = (props) => {
                     ></TextField>
                     <TextField
                       variant="outlined"
+                      name="IC_IAuth"
                       label="Issuing Authority"
                       value={PersonalInfo?.IncomeCert?.IAuth || ""}
                       required
@@ -760,6 +774,7 @@ const PersonalInfo = (props) => {
                     <TextField
                       variant="outlined"
                       label="Issuing Date"
+                      name="IC_IDate"
                       required
                       value={PersonalInfo?.IncomeCert?.IDate}
                       error={Errors && Errors.IIDate}
@@ -793,6 +808,7 @@ const PersonalInfo = (props) => {
                     >
                       Upload Certificate
                       <VisuallyHiddenInput
+                        name="IC_Doc"
                         type="file"
                         onChange={(event) => {
                           const ICfile = event.target.files[0];
@@ -905,6 +921,7 @@ const PersonalInfo = (props) => {
                 <>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <TextField
+                      name="DCN"
                       variant="outlined"
                       label="Domicile Certificate Number"
                       value={PersonalInfo?.DomicileCert?.Number}
@@ -930,6 +947,7 @@ const PersonalInfo = (props) => {
                       fullWidth
                     ></TextField>
                     <TextField
+                      name="DC_IAuth"
                       variant="outlined"
                       label="Issuing Authority"
                       value={PersonalInfo?.DomicileCert?.IAuth || ""}
@@ -956,6 +974,7 @@ const PersonalInfo = (props) => {
                       fullWidth
                     ></TextField>
                     <TextField
+                      name="DC_ApplName"
                       variant="outlined"
                       label="Applicant Name"
                       value={PersonalInfo?.DomicileCert?.ApplName || ""}
@@ -984,6 +1003,7 @@ const PersonalInfo = (props) => {
                     <TextField
                       variant="outlined"
                       label="Issuing Date"
+                      name="DC_IDate"
                       fullWidth
                       value={PersonalInfo?.DomicileCert?.IDate || ""}
                       required
@@ -1016,6 +1036,7 @@ const PersonalInfo = (props) => {
                     >
                       Upload Certificate
                       <VisuallyHiddenInput
+                        name="DC_Doc"
                         type="file"
                         onChange={(event) => {
                           const DCfile = event.target.files[0];
@@ -1070,7 +1091,10 @@ const PersonalInfo = (props) => {
             </div>
           </div>
         </div>
-        <div className="details_pane">Wallet Details</div>
+        <div className="details_pane">
+        Wallet Details
+        <p>Wallet Address : {Details?.WalletAddress}</p>
+        </div>
         <center>
           <Button variant="contained"
            onClick={handleNext}

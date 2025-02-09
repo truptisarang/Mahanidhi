@@ -48,6 +48,7 @@ const OfficerDashboard = () => {
   const [Reason, setReason] = useState();
   const [Amount, setAmount] = useState("");
   const [touched, setTouched] = useState(false);
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
 
   const handleOpenViewModal = (appData) => {
     setopenViewModal(true);
@@ -71,7 +72,7 @@ const OfficerDashboard = () => {
   const getApplications = async () => {
     try {
       const response = await axios.post(
-        "https://mahanidhibackend.onrender.com/getApplications",
+        `${backend_url}/getApplications`,
         {
           mode: "officer",
           DeptName: deptName,
@@ -86,18 +87,18 @@ const OfficerDashboard = () => {
       console.log(error);
     }
   };
+  
   useEffect(() => {
     getApplications();
   }, []);
 
   const updateStatus = async (data) => {
     try {
-      const response = await axios.patch("https://mahanidhibackend.onrender.com/updateStatus", {
+      const response = await axios.patch(`${backend_url}/updateStatus`, {
         Data: data,
       });
       if (response.data.success === true) {
         toast.success("Status updated!!");
-
         setOpenApproveModal(false);
         setOpenRejectModal(false);
         setReason(null);

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import "../Navbar/Navbar.css";
-import {useNavigate } from "react-router-dom";
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { useNavigate } from "react-router-dom";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useDispatch, useSelector } from "react-redux";
-import HomeIcon from '@mui/icons-material/Home';
-import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from "@mui/icons-material/Home";
+import LogoutIcon from "@mui/icons-material/Logout";
 import {
   IconButton,
   Menu,
@@ -13,8 +13,6 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
-  Box,
-  Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -23,12 +21,13 @@ import axios from "axios";
 import { Officerlogout } from "../../redux/slices/officer_slice";
 
 const Navbar = () => {
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+
   const isLoggedIn = useSelector((state) => state.Profile.isLoggedIn);
   const isOfficerLoggedIn = useSelector((state) => state.Officer.isLoggedIn);
   const officerRole = useSelector((state) => state.Officer.role);
 
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onLogin = () => {
@@ -43,6 +42,13 @@ const Navbar = () => {
     navigate("/officer-login", { replace: true });
   };
 
+  const onAdminOfficerDashboard = () => {
+    if(officerRole === "Officer"){
+      navigate("/officer-dashboard", { replace: true });
+    }else{
+      navigate("/admin-dashboard", { replace: true });
+    }
+  };
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -54,16 +60,16 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
-  const Logout = async() =>{
-    const response = await axios.post("https://mahanidhibackend.onrender.com/logout")
-    if(officerRole){
-      dispatch(Officerlogout())
-    }else{
-      dispatch(logout())
+
+
+  const Logout = async () => {
+    const response = await axios.post(`${backend_url}/logout`);
+    if (officerRole) {
+      dispatch(Officerlogout());
+    } else {
+      dispatch(logout());
     }
-  }
- 
+  };
 
   return (
     <>
@@ -73,35 +79,76 @@ const Navbar = () => {
             <h3>महा निधी</h3>
           </div>
           <div>
-          <IconButton style={{ marginLeft: "1rem" }} onClick={(e)=>navigate("/",{replace:true})}>
-            <HomeIcon fontSize="large"></HomeIcon>
-          </IconButton>
-          <IconButton style={{ marginLeft: "1rem" }} onClick={handleClick}>
-            <MenuIcon fontSize="large"></MenuIcon>
-          </IconButton>
-          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-            <MenuItem onClick={onRegister}>
-              <ListItemIcon>
-                <PersonAddIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Register" />
-            </MenuItem>
-            
-            <MenuItem onClick={onLogin}>
-              <ListItemIcon>
-                <LoginIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Login" />
-            </MenuItem>
+            <IconButton
+              style={{ marginLeft: "1rem" }}
+              onClick={(e) => navigate("/", { replace: true })}
+            >
+              <HomeIcon fontSize="large"></HomeIcon>
+            </IconButton>
+            <IconButton style={{ marginLeft: "1rem" }} onClick={handleClick}>
+              <MenuIcon fontSize="large"></MenuIcon>
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+              {(isLoggedIn || isOfficerLoggedIn )? (
+                <>
+                  {isOfficerLoggedIn ? (
+                    <MenuItem onClick={onAdminOfficerDashboard}>
+                      <ListItemIcon>
+                        <AdminPanelSettingsIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary={`${officerRole} Dashboard`} />
+                    </MenuItem>
+                  ) : (
+                    <MenuItem onClick={onRegister}>
+                      <ListItemIcon>
+                        <PersonAddIcon fontSize="small" />
+                      </ListItemIcon>
+                      <ListItemText primary="Dashboard" />
+                    </MenuItem>
+                  )}
+                  <MenuItem onClick={Logout}>
+                    <ListItemIcon>
+                      <LogoutIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Logout" />
+                  </MenuItem>
+                </>
+              ) : (
+                <>
+                  <MenuItem onClick={onRegister}>
+                    <ListItemIcon>
+                      <PersonAddIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Register" />
+                  </MenuItem>
 
-            <MenuItem onClick={onOfficerLogin}>
-              <ListItemIcon>
-                <AdminPanelSettingsIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Officer / Admin Login" />
-            </MenuItem>
-          </Menu>
-          {(isLoggedIn || isOfficerLoggedIn) ? <Button variant={'text'} color="inherit" style={{marginRight:'1rem'}} endIcon={<LogoutIcon></LogoutIcon>} onClick={Logout}>Logout</Button> : null}
+                  <MenuItem onClick={onLogin}>
+                    <ListItemIcon>
+                      <LoginIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Login" />
+                  </MenuItem>
+
+                  <MenuItem onClick={onOfficerLogin}>
+                    <ListItemIcon>
+                      <AdminPanelSettingsIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText primary="Officer / Admin Login" />
+                  </MenuItem>
+                </>
+              )}
+            </Menu>
+            {/* {isLoggedIn || isOfficerLoggedIn ? (
+              <Button
+                variant={"text"}
+                color="inherit"
+                style={{ marginRight: "1rem" }}
+                endIcon={<LogoutIcon></LogoutIcon>}
+                onClick={Logout}
+              >
+                Logout
+              </Button>
+            ) : null} */}
           </div>
         </nav>
       </div>

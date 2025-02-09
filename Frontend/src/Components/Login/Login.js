@@ -25,7 +25,7 @@ const Login = (props) => {
   const [Userid, setUserid] = useState("");
   const [Loading, setLoading] = useState(false);
   const [LoadingVerifyOTP, setLoadingVerifyOTP] = useState(false);
-  const [Role, setRole] = useState("user")
+  const [Role, setRole] = useState("User")
   const [OpenForgotPwd, setOpenForgotPwd] = useState(false)
   const [forgot_pwd_email, setforgot_pwd_email] = useState("")
   const [isValid, setIsValid] = useState(null);
@@ -60,10 +60,13 @@ const Login = (props) => {
     console.log(emailRegex.test(email))
   };
 
+  const backend_url = process.env.REACT_APP_BACKEND_URL;
+
+
   const handleOfficerLogin = async (e) => {
     try {
       setLoading(true)
-      const response = await axios.post("https://mahanidhibackend.onrender.com/officerLogin", {
+      const response = await axios.post(`${backend_url}/officerLogin`, {
         Username,
         Password,
       });
@@ -95,12 +98,13 @@ const Login = (props) => {
   const handleLogin = async (e) => {
     try {
       setLoading(true);
-      const response = await axios.post("https://mahanidhibackend.onrender.com/login", {
+      const response = await axios.post(`${backend_url}/login`, {
         Username,
         Password,
       });
       setEmail(response.data.email);
       setUserid(response.data.userid);
+      setRole(response.data.role);
       // Check if the response indicates success
       if (response.data.success === true) {
         toast.success(response.data.message);
@@ -128,34 +132,20 @@ const Login = (props) => {
   };
 
   const handleNavigation = async () => {
-    // switch (role) {
-    //   case "Officer":
-    //     navigate("/officer-dashboard");
-    //     break;
-    //   case "Admin":
-    //     navigate("/admin-dashboard");
-    //     break;
-    //   default:
-    //     if (!isProfileCompleted) {
-    //       navigate("/profile");
-    //     } else {
-    //       navigate("/dashboard");
-    //     }
-    // }
     if (OTP) {
       setLoadingVerifyOTP(true);
-      const response = await axios.post("https://mahanidhibackend.onrender.com/verifyOTP", {
+      const response = await axios.post(`${backend_url}/verifyOTP`, {
         email: Email,
         enteredOtp: OTP,
         userId: Userid,
         role: Role,
       });
-
+      
       console.log(response)
       if (response.data.success === true) {
         toast.success(response.data.message);
         setLoadingVerifyOTP(false);
-        if(Role  === "user"){
+        if(Role  === "User"){
           dispatch(
             loginSuccess({
               isProfileCompleted: response.data.data.isProfileCompleted,
@@ -174,17 +164,20 @@ const Login = (props) => {
               })
             );
         }
-        if (Role === "user") {
-          if(!isProfileCompleted){
-            navigate("/profile");
-          }else{
-            navigate("/dashboard")
+        switch (Role) {
+            case "Officer":
+              navigate("/officer-dashboard");
+              break;
+            case "Admin":
+              navigate("/admin-dashboard");
+              break;
+            default:
+              if (!response.data.data.isProfileCompleted) {
+                navigate("/profile");
+              } else {
+                navigate("/dashboard");
+              }
           }
-        }else if(Role === "Officer"){
-          navigate("/officer-dashboard")
-        }else if(Role === "IT admin"){
-          navigate("/admin-dashboard")
-        }
       } else {
         toast.error(response.data.message);
       }
@@ -278,8 +271,6 @@ const Login = (props) => {
           />
 
           <div id="forgotContainer">
-            <a onClick={(e)=>{setOpenForgotPwd(true)}}>Forgot Password? </a> &nbsp;&nbsp;
-            <a onClick={(e)=>{setOpenForgotPwd(true)}}>Forgot Username? </a> 
           </div>
           <Button
             variant="contained"
