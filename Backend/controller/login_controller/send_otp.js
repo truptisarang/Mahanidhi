@@ -79,7 +79,10 @@ const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
       const tkn = await generateToken(userid, emailid, role);
       res.cookie("session_token", tkn, {
         httpOnly: true,
-        sameSite: "Strict",
+        sameSite: "None",
+        secure:true,
+        domain:"https://mahanidhifrontend.onrender.com",
+        path:"/",
         maxAge: 3600000,
       });
 
