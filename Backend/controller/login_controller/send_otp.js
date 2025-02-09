@@ -81,7 +81,6 @@ const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
         httpOnly: true,
         sameSite: "None",
         secure:true,
-        domain:"https://mahanidhifrontend.onrender.com",
         path:"/",
         maxAge: 3600000,
       });
