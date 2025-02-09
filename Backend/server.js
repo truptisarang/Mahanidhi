@@ -40,7 +40,7 @@ const limiter = rate_limit({
 
 app.use(
   cors({
-    origin: "https://mahanidhifrontend.onrender.com/",
+    origin: "https://mahanidhifrontend.onrender.com",
     credentials: true,
   })
 );
