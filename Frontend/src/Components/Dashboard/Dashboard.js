@@ -33,18 +33,35 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-   const fetchWalletBalance = async() =>{
-    const walletAddress = await getWallet();
-    console.log("Wallet Address:",walletAddress)
-    if(walletAddress){
-       await getUSDCBalance(walletAddress)        
-       console.log(Balance)
-    }else{
-      return;
-    }
-   }
-   fetchWalletBalance();
+    const fetchWalletBalance = async () => {
+      const walletAddress = await getWallet();
+      console.log("Wallet Address:", walletAddress);
+      if (walletAddress) {
+        setAddress(walletAddress); // Ensure Address is updated before calling getUSDCBalance
+      }
+    };
+    fetchWalletBalance();
   }, []);
+
+  useEffect(() => {
+    if (Address) {
+      getUSDCBalance(Address); // Call getUSDCBalance only after Address is updated
+    }
+  }, [Address]);
+
+  // useEffect(() => {
+  //  const fetchWalletBalance = async() =>{
+  //   const walletAddress = await getWallet();
+  //   console.log("Wallet Address:",walletAddress)
+  //   if(walletAddress){
+  //      await getUSDCBalance(walletAddress)        
+  //      console.log(Balance)
+  //   }else{
+  //     return;
+  //   }
+  //  }
+  //  fetchWalletBalance();
+  // }, []);
 
  
 
@@ -62,7 +79,7 @@ const Dashboard = () => {
         <h3>Dashboard</h3>
         <div id="dashboard_cards">
           <DCard
-            balance={`${Balance} USDC`}
+            balance={`${Balance !== undefined ? Balance : 0} USDC`}
             walletAddr={truncateAddress(Address)}
             color="#FFF6E3"
           />
