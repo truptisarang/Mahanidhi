@@ -37,7 +37,7 @@ const Dashboard = () => {
     const walletAddress = await getWallet();
     console.log(walletAddress)
     if(walletAddress){
-        getUSDCBalance(walletAddress)        
+       await getUSDCBalance(walletAddress)        
     }
    }
    fetchWalletBalance();
