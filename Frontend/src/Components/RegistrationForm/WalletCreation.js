@@ -31,6 +31,7 @@ const WalletCreation = (props) =>{
             link.href = URL.createObjectURL(blob);
             link.download = "wallet-info.txt";
             link.click();
+            console.log(newWallet)
             const response = await axios.post(`${backend_url}/storePersonalDetails`,{creds:Creds, pd:personal_details, walletAddr:newWallet.address})
             if(response.data.success){
               toast.success(response.data.message)
