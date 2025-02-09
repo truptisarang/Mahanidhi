@@ -66,7 +66,7 @@ const get_application_controller = async (req, res) => {
       }
     } else {
       // Fetch a single application based on Aadhaar (unchanged)
-      const response = await application_model.findOne({
+      const response = await application_model.find({
         AadhaarNumber: Aadhaar,
       });
       res.json({ data: response });

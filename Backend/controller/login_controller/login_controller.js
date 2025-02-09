@@ -16,19 +16,19 @@ const login_controller = async (req, res) => {
     }
 
     const response = await user_model.findOne({ Username: uname });
-    console.log(response)
-    const emailid = response.Email;
 
     if (response !== null) {
       const comp_pwd = await bc.compare(passwd, response.Password);
 
       if (comp_pwd === true) {
+        const emailid = response.Email;
         await send_otp_to_mail(emailid);
         return res.status(200).json({
           success: true,
           message: "OTP sent to registered email id",
           email:emailid,
-          userid:response._id
+          userid:response._id,
+          role:response.Role
         });        
 
       }else {

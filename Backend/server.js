@@ -17,9 +17,13 @@ const verify_otp_router = require("./router/login_router/verify_otp_router")
 const logout_router = require("./router/login_router/logout_router")
 const add_officer_router = require("./router/officer_router/add_officer_router");
 const delete_officer_router = require("./router/officer_router/delete_officer_router");
+const get_balance_router = require("./router/data_router/get_balance_router")
 
 const app = express();
 const cors = require("cors");
+app.use(express.json({ limit: '50mb' }));
+
+const cookieParser = require('cookie-parser');
 
 app.use(express.json());
 const Loginlimiter = rate_limit({
@@ -29,7 +33,7 @@ const Loginlimiter = rate_limit({
 });
 
 const limiter = rate_limit({
-  max:200,
+  max:1500,
   windowMs:60 * 60 * 1000,
   message:"Too many requests. Please try again later in 15 minutes."
 });
@@ -56,13 +60,16 @@ app.use("/submitForm", submit_application_router);
 app.use("/cancelApplication", cancel_application_router);
 app.use("/getApplications", get_application_router);
 app.use("/logout", logout_router);
-
+app.use("/getUSDCBalance", get_balance_router)
 
 app.use("/officerLogin", officer_login_router);
+
 app.use("/getofficerDetails", get_officer_details_router);
 app.use("/addOfficer", add_officer_router);
 app.use("/deleteOfficer", delete_officer_router);
 app.use("/updateStatus", update_status_router);
+
+
 let aadhaar_model;
 
 const startServer = async () => {

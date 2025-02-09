@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
           AadhaarNumber: String,
+          Role:{type:String, default:"User"},
           FullName: String,
           DOB: String,
           Gender: String,
@@ -13,6 +14,7 @@ const userSchema = mongoose.Schema({
           PersonalInfo:{},
           CourseDetails:[],
           Email:String,
+          WalletAddress:String,
           isProfileCompleted:{type:Boolean, default:false}
         })
 const userModel = new mongoose.model("users", userSchema)

@@ -21,7 +21,7 @@ const submit_application_controller = async(req, res) =>{
             res.json({msg:AppID})
         }
     }catch(error){
-        console.error(error)
+        res.json({error})
     }
 }
 

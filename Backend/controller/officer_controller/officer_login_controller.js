@@ -7,6 +7,7 @@ const login_controller = async (req, res) => {
   try {
     const uname = req.body.Username;
     const passwd = req.body.Password;
+    console.log(uname, passwd)
     if (!uname || !passwd) {
       return res.status(400).json({
         success: false,
@@ -15,12 +16,12 @@ const login_controller = async (req, res) => {
     }
 
     const response = await officer_model.findOne({ Username: uname });
-    const emailid = response.Email;
-
+    console.log(response)
     if (response !== null) {
-      const comp_pwd = await bc.compare(passwd, response.Password);
-      
+      const comp_pwd = await bc.compare(passwd, response.Password);   
+      console.log(comp_pwd)   
       if (comp_pwd === true) {
+        const emailid = response.Email;
         await send_otp_to_mail(emailid);
         return res.status(200).json({
           success: true,

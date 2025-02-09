@@ -50,11 +50,8 @@ const send_otp_to_mail = async (emailid) => {
 
 const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
   try {
-    // console.log(emailid)
     const otpRecord = otpStore[emailid];
-    console.log(otpStore);
-    console.log(otpRecord);
-    let response;
+    let response, Role;
     if (!otpRecord) {
       return res.json({ success: false, message: "Invalid OTP" });
     }
@@ -68,13 +65,15 @@ const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
         message: "OTP has expired.",
       });
     }
+
     if (otpRecord.otp === enteredOtp) {
       delete otpStore[emailid];
-     
-      if(role === "user"){
+      console.log(role)
+      if(role === "User"){
         response = await user_model.findById({_id:userid},{Password:0})
       }else{
         response = await officer_model.findOne({OfficerID:userid},{Password:0})
+        Role = response.Role
       }
 
       const tkn = await generateToken(userid, emailid, role);
@@ -84,7 +83,7 @@ const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
         maxAge: 3600000,
       });
 
-      if(role === "user"){
+      if(role === "User"){
         return res.json({ success: true, message: "OTP verified successfully!", data:{isProfileCompleted:response.isProfileCompleted,username: response.Username,Aadhaar:response.AadhaarNumber}});
       }else{
         return res.json({ success: true, message: "OTP verified successfully!", data:{fullName:response.FullName, deptName: response.DeptName, role:response.Role}})
@@ -98,4 +97,4 @@ const verify_otp = async (emailid, enteredOtp, res, userid, role) => {
   }
 };
 
-module.exports = { send_otp_to_mail, verify_otp };
+module.exports = { send_otp_to_mail, verify_otp};

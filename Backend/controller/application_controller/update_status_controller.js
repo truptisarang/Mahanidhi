@@ -1,6 +1,7 @@
 const app_model = require("../../model/application_model");
 const axios = require("axios");
-const disburseFunds = require("../services/fund_disbursement")
+const disburseFunds = require("../services/fund_disbursement");
+const userModel = require("../../model/users_model");
 
 const fetchExchangeRates = async () => {
   try {
@@ -15,6 +16,7 @@ const fetchExchangeRates = async () => {
     console.log("Error while fetching exchange rates");
   }
 };
+
 const update_status_controller = async (req, res) => {
   const { Data } = req.body;
   console.log(Data);
@@ -30,13 +32,20 @@ const update_status_controller = async (req, res) => {
     } else {
       const response = await app_model.findOneAndUpdate(
         { applicationId: Data.appid },
-        { status: Data.status, amount: Data.amount }
+        { status: Data.status, amount: Data.amount },
+        { new: true }
       );
-      if (response) {
+      const aadhaar = response.AadhaarNumber;
+
+      const user_response = await userModel.findOne({ AadhaarNumber: aadhaar });
+      const wallet_address = user_response.WalletAddress;
+      console.log(wallet_address);
+
+      if (response && user_response) {
         const USD_exchange_rate = await fetchExchangeRates();
         const inr_amt = parseInt(Data.amount);
         const USD_amount = parseInt(inr_amt * USD_exchange_rate);
-        disburseFunds("0x1F00fd816a1d07b95263091f1A8028553e1Bc8A8", USD_amount)
+        disburseFunds(wallet_address, USD_amount);
         res.json({ success: true });
       }
     }
