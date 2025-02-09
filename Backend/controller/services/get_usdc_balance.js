@@ -25,7 +25,7 @@ const sendUSDCBalance = async (req, res) =>{
     if(walletAddress){
         const USDC_balance = await getUSDCBalance(walletAddress);
         console.log(walletAddress, USDC_balance);
-        return res.json({success:true,data:USDC_balance})
+        return res.json({ success: true, data: USDC_balance });
     }else{
         return res.json({success:false, message:"Wallet Address not provided"})
     }
